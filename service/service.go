@@ -1,59 +1,29 @@
 package service
 
-import "database/sql"
+import (
+	"github.com/gin-gonic/gin"
+)
 
-func addDay(record *DayRecord) {
-
-}
-func saveDay(record *DayRecord) {
-
-}
-func getDay(day int, code int) (error, *DayRecord) {
-	dayRecord := &DayRecord{}
-	stm := stms[saveDayStmt].Stm
-	stm.QueryRow(getId(day, code)).Scan(&dayRecord.Id,
-		&dayRecord.Day, &dayRecord.Code, &dayRecord.High,
-		&dayRecord.Low, &dayRecord.Close, &dayRecord.Amount,
-		&dayRecord.Vol, &dayRecord.Zt, &dayRecord.Dt,
-		&dayRecord.Dm, &dayRecord.Dr, && dayRecord.Pb,
-		&dayRecord.Stop, &dayRecord.Lb)
-	return nil, nil
-}
-
-type StmType int
-type Stm struct {
-	Sql string
-	Stm *sql.Stmt
-}
-
-func getId(day, code int) int64 {
-	return int64(day*1000000 + code)
-}
-
-func existsDay(day int, code int) (error, bool) {
-	stm := stms[existsDayStmt].Stm
-	c := 0
-	if err := stm.QueryRow(getId(day, code)).Scan(&c); err != nil {
-		return err, false
+func addDay(context *gin.Context) {
+	day := &DayRecord{}
+	if err := context.BindJSON(&day); err != nil {
+		panic("解析数据错误")
 	}
-	return nil, c > 0
-}
-
-func initStms() {
-	for _, v := range stms {
-		if stm, err := db.Prepare(v.Sql); err != nil {
-			panic(`sql:select 1 from day_record where day=$1 and code=$2 错误` + err.Error())
-		} else {
-			v.Stm = stm
-		}
+	rst := GetDB().Where("day=? and code=?", day.Day, day.Code)
+	checkError(rst.Error)
+	if rst.RowsAffected > 0 {
+		panic("记录已经存在")
+	}
+	//计算 计算字段
+	//拿上一条记录来
+	preDay := &DayRecord{}
+	rst = GetDB().Where("code=?", day.Code).Order("day desc").First(&preDay)
+	checkError(rst.Error)
+	if rst.RowsAffected == 0 {
+		//没有上次的记录
+		//直接插入数据
+		GetDB().Save(&day)
+		return
 	}
 
-}
-func closeStms() {
-	for _, v := range stms {
-		if v.Stm != nil {
-			v.Stm.Close()
-			v.Stm = nil
-		}
-	}
 }

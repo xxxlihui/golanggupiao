@@ -1,6 +1,5 @@
 create table day_record
 (
-    id     bigint,
     day    int,
     code   int,
     high   float,
@@ -18,7 +17,6 @@ create table day_record
 );
 create table day_stat
 (
-    id     bigint,
     day    int,
     code   int,
     high   float,
@@ -33,9 +31,8 @@ create table day_stat
     pb     int,
     stop   int
 );
-create table day_lb_record
+create table day_lb
 (
-    id   bigint,
     day  int,
     code int,
     lb   int
