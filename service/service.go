@@ -2,6 +2,7 @@ package service
 
 import (
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 func addDay(context *gin.Context) {
@@ -18,6 +19,10 @@ func addDay(context *gin.Context) {
 	//拿上一条记录来
 	preDay := &DayRecord{}
 	rst = GetDB().Where("code=?", day.Code).Order("day desc").First(&preDay)
+	//计算
+	day.Zf = (day.Close - preDay.Close) / preDay.Close
+	day.Zt = floatCompare(day.Zf, preDay.Close*0.1)
+
 	checkError(rst.Error)
 	if rst.RowsAffected == 0 {
 		//没有上次的记录
@@ -25,5 +30,15 @@ func addDay(context *gin.Context) {
 		GetDB().Save(&day)
 		return
 	}
+}
 
+func queryDayStat(ctx *gin.Context) {
+	startday := ctx.GetInt("startDay")
+	days := make([]DayStat, 0)
+	if startday > 0 {
+		GetDB().Where("day>=?", startday).Find(&days)
+	} else {
+		GetDB().Order("day desc").Limit(100).Find(&days)
+	}
+	ctx.JSON(http.StatusOK, days)
 }
