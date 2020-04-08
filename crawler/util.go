@@ -1,14 +1,17 @@
 package crawler
 
 import (
-	"strconv"
 	"strings"
 )
 
-func intsJoin(i []int) string {
-	s := make([]string, 0, len(i))
-	for k, e := range i {
-		s[k] = strconv.FormatInt(int64(e), 10)
+func intsJoin(i []string) string {
+	f := i
+	for k, e := range f {
+		if strings.HasPrefix(e, "00") || strings.HasPrefix(e, "300") {
+			i[k] = "sz" + e
+		} else {
+			i[k] = "sh" + e
+		}
 	}
-	return strings.Join(s, ",")
+	return strings.Join(i, ",")
 }

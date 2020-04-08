@@ -1,9 +1,11 @@
 package spider
 
 import (
+	"bytes"
 	"context"
 	"crypto/rand"
 	"crypto/tls"
+	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
@@ -90,6 +92,20 @@ func (c *Client) Post(url, referer, contentType string, header http.Header, body
 	}
 	copyHeader(header, req.Header)
 	req.Header.Set("Content-Type", contentType)
+	return c.Do(referer, req, ctx)
+}
+func (c *Client) PostValue(url, referer string, header http.Header, value interface{}, ctx context.Context) (*http.Response, error) {
+	bys, err := json.Marshal(&value)
+	if err != nil {
+		return nil, err
+	}
+	body := bytes.NewBuffer(bys)
+	req, err := http.NewRequest(http.MethodPost, url, body)
+	if err != nil {
+		return nil, err
+	}
+	copyHeader(header, req.Header)
+	req.Header.Set("Content-Type", "application/json")
 	return c.Do(referer, req, ctx)
 }
 

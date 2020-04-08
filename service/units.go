@@ -2,6 +2,7 @@ package service
 
 import (
 	"math"
+	"nn/data"
 	"strings"
 )
 
@@ -27,7 +28,7 @@ func Float64Compare(f1, f2 float64, precision float64) bool {
 }
 
 //分析当日的情况
-func DayAnalyze(curDay *DayRecord) {
+func DayAnalyze(curDay *data.DayRecord) {
 	if Float64Compare(curDay.PreClose, 0, 2) {
 		//涨幅
 		curDay.Zf = (curDay.Close - curDay.Open) / curDay.Open
@@ -72,5 +73,5 @@ func DayAnalyze(curDay *DayRecord) {
 	//是否是st
 	curDay.St = strings.Index(curDay.Name, "st") > -1
 	//是否是创业板
-	curDay.Cy = curDay.Code >= 300000 && curDay.Code < 400000
+	curDay.Cy = strings.HasPrefix(curDay.Code, "300")
 }

@@ -6,7 +6,6 @@ import (
 
 func StartHttp(port string) {
 	app := gin.Default()
-	app.GET("/api/addDay", addDay)
 
 	app.Run(port)
 }

@@ -3,10 +3,11 @@ package service
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"nn/data"
 )
 
 func AddDay(context *gin.Context) {
-	day := &DayRecord{}
+	day := &data.DayRecord{}
 	if err := context.BindJSON(&day); err != nil {
 		panic("解析数据错误")
 	}
@@ -17,7 +18,7 @@ func AddDay(context *gin.Context) {
 	}
 	//计算 计算字段
 	//拿上一条记录来
-	preDay := &DayRecord{}
+	preDay := &data.DayRecord{}
 	rst = GetDB().Where("code=?", day.Code).Order("day desc").First(&preDay)
 	//计算
 	day.Zf = (day.Close - preDay.Close) / preDay.Close
@@ -34,7 +35,7 @@ func AddDay(context *gin.Context) {
 
 func QueryDayStat(ctx *gin.Context) {
 	startday := ctx.GetInt("startDay")
-	days := make([]DayStat, 0)
+	days := make([]data.DayStat, 0)
 	if startday > 0 {
 		GetDB().Where("day>=?", startday).Find(&days)
 	} else {

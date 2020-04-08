@@ -1,11 +1,11 @@
-package service
+package data
 
 //全部浮点数用int表示前三位表示小数位
 
 type DayRecord struct {
 	Day      int     `gorm:"PRIMARY_KEY" json:"day"`
 	Open     float64 `gorm:"PRIMARY_KEY" json:"open"`
-	Code     int     `json:"code"`
+	Code     string  `json:"code" gorm:"type:varchar(8)"`
 	Name     string  `json:"name" gorm:"type:varchar(5)"`
 	High     float64 `json:"high" gorm:"type:numeric(11,2)"`     //最高
 	Low      float64 `json:"low" gorm:"type:numeric(11,2)"`      //最低

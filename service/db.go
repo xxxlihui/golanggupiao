@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/jinzhu/gorm"
 	_ "github.com/lib/pq"
+	"nn/data"
 )
 
 var db *gorm.DB
@@ -20,7 +21,7 @@ func InitDb(host, user, password, dbname string, port int) {
 	}
 	db = _db
 	db.LogMode(true)
-	db.AutoMigrate(&DayRecord{}, &DayStat{})
+	db.AutoMigrate(&data.DayRecord{}, &data.DayStat{})
 }
 func CloseDb() {
 	db.Close()

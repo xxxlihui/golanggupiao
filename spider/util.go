@@ -9,6 +9,7 @@ import (
 )
 
 type ResponseFunc func() (*http.Response, error)
+type TransCodeFunc func(bys []byte, head http.Header) string
 
 func GetAbsoluteUrl(from, u string) (string, error) {
 	base, err := _url.Parse(from)
@@ -34,10 +35,13 @@ func GetResponseBytes(rspFunc ResponseFunc) ([]byte, http.Header, *http.Response
 	}
 	return _body, rsp.Header, rsp, nil
 }
-func GetResponseString(rspFunc ResponseFunc) (string, http.Header, *http.Response, error) {
+func GetResponseString(transCodeFunc TransCodeFunc, rspFunc ResponseFunc) (string, http.Header, *http.Response, error) {
 	_body, _header, rsp, err := GetResponseBytes(rspFunc)
 	if err != nil {
 		return "", _header, rsp, err
+	}
+	if transCodeFunc != nil {
+		return transCodeFunc(_body, _header), _header, rsp, nil
 	}
 	return string(_body), _header, rsp, nil
 }
