@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-func addDay(context *gin.Context) {
+func AddDay(context *gin.Context) {
 	day := &DayRecord{}
 	if err := context.BindJSON(&day); err != nil {
 		panic("解析数据错误")
@@ -21,7 +21,7 @@ func addDay(context *gin.Context) {
 	rst = GetDB().Where("code=?", day.Code).Order("day desc").First(&preDay)
 	//计算
 	day.Zf = (day.Close - preDay.Close) / preDay.Close
-	day.Zt = floatCompare(day.Zf, preDay.Close*0.1)
+	day.Zt = Float64Compare(day.Zf, preDay.Close*0.1, 2)
 
 	checkError(rst.Error)
 	if rst.RowsAffected == 0 {
@@ -32,7 +32,7 @@ func addDay(context *gin.Context) {
 	}
 }
 
-func queryDayStat(ctx *gin.Context) {
+func QueryDayStat(ctx *gin.Context) {
 	startday := ctx.GetInt("startDay")
 	days := make([]DayStat, 0)
 	if startday > 0 {

@@ -13,11 +13,13 @@ func InitDb(host, user, password, dbname string, port int) {
 	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
 		"password=%s dbname=%s sslmode=disable",
 		host, port, user, password, dbname)
+	fmt.Println(psqlInfo)
 	_db, err := gorm.Open("postgres", psqlInfo)
 	if err != nil {
 		panic(err)
 	}
 	db = _db
+	db.LogMode(true)
 	db.AutoMigrate(&DayRecord{}, &DayStat{})
 }
 func CloseDb() {

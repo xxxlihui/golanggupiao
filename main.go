@@ -28,9 +28,9 @@ func main() {
 			},
 			&cli.StringFlag{
 				Name:    "db_user",
-				Usage:   "数据登录账户 默认root",
+				Usage:   "数据登录账户 默认postgres",
 				EnvVars: []string{"DB_USER"},
-				Value:   "root",
+				Value:   "postgres",
 			},
 			&cli.StringFlag{
 				Name:    "db_pwd",
