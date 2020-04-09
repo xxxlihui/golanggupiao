@@ -2,24 +2,19 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="20f5d506-7c3d-4da4-8b35-edc5b7dbc904" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/crawler/util_test.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tool/client/client.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tool/client/client_test.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/user.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tool/client/set.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/1b5b7e68-da37-4c47-8dd5-e6386ccb59c1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/1b5b7e68-da37-4c47-8dd5-e6386ccb59c1.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/crawler/server.go" beforeDir="false" afterPath="$PROJECT_DIR$/crawler/server.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/crawler/sina.go" beforeDir="false" afterPath="$PROJECT_DIR$/crawler/sina.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/crawler/util.go" beforeDir="false" afterPath="$PROJECT_DIR$/crawler/util.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/service/day.go" beforeDir="false" afterPath="$PROJECT_DIR$/data/day.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/day.go" beforeDir="false" afterPath="$PROJECT_DIR$/data/day.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/service/db.go" beforeDir="false" afterPath="$PROJECT_DIR$/service/db.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/service/http.go" beforeDir="false" afterPath="$PROJECT_DIR$/service/http.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/service/real.go" beforeDir="false" afterPath="$PROJECT_DIR$/service/real.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/service/service.go" beforeDir="false" afterPath="$PROJECT_DIR$/service/service.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/service/units.go" beforeDir="false" afterPath="$PROJECT_DIR$/service/units.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spider/client.go" beforeDir="false" afterPath="$PROJECT_DIR$/spider/client.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spider/util.go" beforeDir="false" afterPath="$PROJECT_DIR$/spider/util.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tool/client/client.go" beforeDir="false" afterPath="$PROJECT_DIR$/tool/client/client.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tool/client/client_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/tool/client/client_test.go" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -73,15 +68,6 @@
         <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
         <item name="PostgreSQL - @server2" type="feb32156:DbDataSourceImpl" />
         <item name="databases" type="d4e8921:DatabaseStructure$FamilyGroup" />
-        <item name="gupiao: database" type="162271b6:PgImplModel$Database" />
-        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
-        <item name="public: schema" type="983ebcf7:PgImplModel$Schema" />
-        <item name="tables" type="d4e8921:DatabaseStructure$FamilyGroup" />
-      </path>
-      <path>
-        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
-        <item name="PostgreSQL - @server2" type="feb32156:DbDataSourceImpl" />
-        <item name="databases" type="d4e8921:DatabaseStructure$FamilyGroup" />
         <item name="postgres: database" type="162271b6:PgImplModel$Database" />
       </path>
       <path>
@@ -114,6 +100,7 @@
     <ConfirmationsSetting value="2" id="Add" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="DatabaseDriversLRU" value="postgresql" />
     <property name="DefaultGoTemplateProperty" value="Go File" />
     <property name="GO_FMT" value="true" />
@@ -123,10 +110,10 @@
     <property name="configurable.Module.GOPATH.is.expanded" value="false" />
     <property name="configurable.Project.GOPATH.is.expanded" value="true" />
     <property name="go.import.settings.migrated" value="true" />
-    <property name="last_opened_file_path" value="/media/e/tdx/ll/lday/sz000001.day" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/tool/client" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
-    <property name="settings.editor.selected.configurable" value="go.vgo" />
+    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -150,13 +137,14 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Go Test.TestReadFolder in nn/tool/client">
+  <component name="RunManager" selected="Go Build.go build nn/tool/client">
     <configuration name="go build nn" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
       <module name="nn" />
       <working_directory value="$PROJECT_DIR$" />
       <envs>
         <env name="DB_HOST" value="server2" />
         <env name="DB_PORT" value="30002" />
+        <env name="PORT" value=":8080" />
       </envs>
       <kind value="PACKAGE" />
       <filePath value="$PROJECT_DIR$/main.go" />
@@ -164,15 +152,13 @@
       <directory value="$PROJECT_DIR$/" />
       <method v="2" />
     </configuration>
-    <configuration name="TestFloat64Round in nn/service" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+    <configuration name="go build nn/tool/client" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
       <module name="nn" />
-      <working_directory value="$PROJECT_DIR$/service" />
-      <framework value="gotest" />
+      <working_directory value="$PROJECT_DIR$" />
       <kind value="PACKAGE" />
-      <package value="nn/service" />
+      <filePath value="$PROJECT_DIR$/tool/client/client.go" />
+      <package value="nn/tool/client" />
       <directory value="$PROJECT_DIR$/" />
-      <filePath value="$PROJECT_DIR$/" />
-      <pattern value="^TestFloat64Round$" />
       <method v="2" />
     </configuration>
     <configuration name="TestGetByCodes in nn/crawler" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
@@ -200,28 +186,32 @@
     <configuration name="TestReadFolder in nn/tool/client" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
       <module name="nn" />
       <working_directory value="$PROJECT_DIR$/tool/client" />
+      <envs>
+        <env name="check-go-version" value="false" />
+      </envs>
       <framework value="gotest" />
       <kind value="PACKAGE" />
       <package value="nn/tool/client" />
       <directory value="$PROJECT_DIR$/" />
       <filePath value="$PROJECT_DIR$/" />
       <pattern value="^TestReadFolder$" />
+      <output_directory value="$PROJECT_DIR$/tool/client" />
       <method v="2" />
     </configuration>
     <list>
       <item itemvalue="Go Build.go build nn" />
-      <item itemvalue="Go Test.TestFloat64Round in nn/service" />
       <item itemvalue="Go Test.TestGetByCodes in nn/crawler" />
       <item itemvalue="Go Test.TestReadFile in nn/tool/client" />
       <item itemvalue="Go Test.TestReadFolder in nn/tool/client" />
+      <item itemvalue="Go Build.go build nn/tool/client" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Go Build.go build nn/tool/client" />
         <item itemvalue="Go Test.TestReadFolder in nn/tool/client" />
+        <item itemvalue="Go Build.go build nn" />
         <item itemvalue="Go Test.TestReadFile in nn/tool/client" />
         <item itemvalue="Go Test.TestGetByCodes in nn/crawler" />
-        <item itemvalue="Go Build.go build nn" />
-        <item itemvalue="Go Test.TestFloat64Round in nn/service" />
       </list>
     </recent_temporary>
   </component>
@@ -232,12 +222,12 @@
           <expand>
             <path>
               <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
-              <item name="com.intellij.execution.services.ServiceModel$ServiceGroupNode@5d538776" type="7427dc5b:ServiceModel$ServiceGroupNode" />
+              <item name="com.intellij.execution.services.ServiceModel$ServiceGroupNode@4c48e75d" type="7427dc5b:ServiceModel$ServiceGroupNode" />
             </path>
             <path>
               <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
-              <item name="com.intellij.execution.services.ServiceModel$ServiceGroupNode@5d538776" type="7427dc5b:ServiceModel$ServiceGroupNode" />
-              <item name="com.intellij.execution.services.ServiceModel$ServiceNode@3b20e48d" type="9fbbdea:ServiceModel$ServiceNode" />
+              <item name="com.intellij.execution.services.ServiceModel$ServiceGroupNode@4c48e75d" type="7427dc5b:ServiceModel$ServiceGroupNode" />
+              <item name="com.intellij.execution.services.ServiceModel$ServiceNode@42243676" type="9fbbdea:ServiceModel$ServiceNode" />
             </path>
           </expand>
           <select />
@@ -264,7 +254,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="11" />
     <MESSAGE value="使用新浪的接口进行获取实时数据" />
-    <option name="LAST_COMMIT_MESSAGE" value="使用新浪的接口进行获取实时数据" />
+    <MESSAGE value="使用新浪的接口进行获取实时数据,用本地的通达信日数据来做每日的归总处理" />
+    <option name="LAST_COMMIT_MESSAGE" value="使用新浪的接口进行获取实时数据,用本地的通达信日数据来做每日的归总处理" />
   </component>
   <component name="VgoProject">
     <integration-enabled>true</integration-enabled>
@@ -277,6 +268,31 @@
           <url>file://$PROJECT_DIR$/crawler/sina.go</url>
           <line>35</line>
           <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/service/service.go</url>
+          <line>17</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/service/units.go</url>
+          <line>15</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/tool/client/client.go</url>
+          <line>67</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/../../pkg/mod/github.com/urfave/cli/v2@v2.1.1/altsrc/flag.go</url>
+          <line>55</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/../../pkg/mod/github.com/urfave/cli/v2@v2.1.1/altsrc/yaml_file_loader.go</url>
+          <line>22</line>
+          <option name="timeStamp" value="8" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

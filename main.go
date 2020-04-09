@@ -60,8 +60,7 @@ func main() {
 				context.String("db_name"),
 				context.Int("db_port"),
 			)
-
-			return nil
+			return service.StartServer(context.String("port"))
 		},
 	}
 

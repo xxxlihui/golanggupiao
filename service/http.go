@@ -4,12 +4,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func StartHttp(port string) {
+func StartServer(addr string) error {
 	app := gin.Default()
-
-	app.Run(port)
-}
-
-type Err struct {
-	Msg string `json:"msg"`
+	apiGroup := app.Group("/api")
+	apiGroup.POST("/import", ImportData)
+	return app.Run(addr)
 }

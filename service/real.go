@@ -43,10 +43,10 @@ func StartGetData() {
 			}
 		}()
 		first := curIndex
-		last := curIndex + 200
+		last := curIndex + lenPerOne
 		if first > len(allCode) {
 			first = 0
-			last = curIndex + 200
+			last = curIndex + lenPerOne
 		}
 		if last > len(allCode) {
 			last = len(allCode)

@@ -10,6 +10,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"nn/data"
+	"nn/log"
 	"nn/spider"
 	"os"
 	"path/filepath"
@@ -20,38 +21,38 @@ func main() {
 	var url, token, folder string
 	var day int
 	flags := []cli.Flag{
-		&cli.StringFlag{
+		altsrc.NewStringFlag(&cli.StringFlag{
 			Name:        "server-url",
 			Aliases:     []string{"s", "URL"},
 			Usage:       "服务端的地址url",
 			EnvVars:     []string{"URL"},
 			Required:    true,
 			Destination: &url,
-		},
-		&cli.StringFlag{
+		}),
+		altsrc.NewStringFlag(&cli.StringFlag{
 			Name:        "token",
 			Aliases:     []string{"t"},
 			Usage:       "认证token",
 			EnvVars:     []string{"TOKEN"},
 			Required:    true,
 			Destination: &token,
-		},
-		&cli.IntFlag{
+		}),
+		altsrc.NewIntFlag(&cli.IntFlag{
 			Name:        "day",
 			Usage:       "要开始导入的时间,int格式：20200318",
 			Aliases:     []string{"d"},
 			EnvVars:     []string{"DAY"},
 			Required:    true,
 			Destination: &day,
-		},
-		&cli.StringFlag{
+		}),
+		altsrc.NewStringFlag(&cli.StringFlag{
 			Name:        "folder",
 			Aliases:     []string{"f"},
 			Usage:       "通达信的目录",
 			EnvVars:     []string{"FOLDER"},
 			Required:    true,
 			Destination: &folder,
-		},
+		}),
 	}
 	app := cli.App{
 		Name:    "股票数据通达信数据提取客户端",
@@ -60,11 +61,17 @@ func main() {
 		Authors: []*cli.Author{{Name: "lhn", Email: "550124023@qq.com"}},
 		Flags:   flags,
 		Before: func(context *cli.Context) error {
-			altsrc.InitInputSourceWithContext(flags, altsrc.NewYamlSourceFromFlagFunc("set.yaml"))
+			log.Debug("-----------------before")
 			return nil
 		},
 		Action: func(context *cli.Context) error {
-
+			fds := []string{filepath.Join(folder, "vipdoc/sh/lday"),
+				filepath.Join(folder, "vipdoc/sz/lday")}
+			for _, f := range fds {
+				if err := ReadFolder(f, url, token, day); err != nil {
+					return err
+				}
+			}
 			return nil
 		},
 	}
@@ -82,26 +89,19 @@ func ReadFolder(fd, url, token string, day int) error {
 			strings.HasPrefix(e.Name(), "sh603") ||
 			strings.HasPrefix(e.Name(), "sz00") ||
 			strings.HasPrefix(e.Name(), "sz30") {
-			records, err := ReadFile(day, filepath.Join(fd, e.Name()))
+			code := strings.TrimRight(e.Name(), ".day")
+			code = strings.ToLower(code)
+			records, err := ReadFile(day, code, filepath.Join(fd, e.Name()))
 			if err != nil {
 				return err
 			}
-			code := strings.TrimRight(e.Name(), ".day")
-			err = PostData(url, token, PostDataStruct{
-				Code: code,
-				Data: records,
-			})
+			err = PostData(url, token, &records)
 			if err != nil {
 				return err
 			}
 		}
 	}
 	return nil
-}
-
-type PostDataStruct struct {
-	Code string            `json:"code"`
-	Data []*data.DayRecord `json:"data"`
 }
 
 func PostData(url, token string, value interface{}) error {
@@ -116,7 +116,7 @@ func PostData(url, token string, value interface{}) error {
 	return nil
 }
 
-func ReadFile(day int, fp string) ([]*data.DayRecord, error) {
+func ReadFile(day int, code, fp string) ([]*data.DayRecord, error) {
 	bys, err := ioutil.ReadFile(fp)
 	if err != nil {
 		return nil, err
@@ -133,10 +133,12 @@ func ReadFile(day int, fp string) ([]*data.DayRecord, error) {
 		if err != nil {
 			return nil, err
 		}
-		fmt.Printf("record:%+v\n", record)
+
 		if record.Day < day {
 			continue
 		}
+		record.Code = code
+		fmt.Printf("day:%d,record:%+v\n", day, record)
 		records = append(records, record)
 	}
 	return records, nil
