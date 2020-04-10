@@ -1,4 +1,4 @@
 server-url: "http://192.168.31.188:8080/api/import"
 token: "123"
 day: 20200101
-folder: "C:\new_dgzq_v6"
+folder: "C:\\new_dgzq_v6"

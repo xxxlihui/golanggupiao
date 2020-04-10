@@ -10,7 +10,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"nn/data"
-	"nn/log"
 	"nn/spider"
 	"os"
 	"path/filepath"
@@ -26,7 +25,6 @@ func main() {
 			Aliases:     []string{"s", "URL"},
 			Usage:       "服务端的地址url",
 			EnvVars:     []string{"URL"},
-			Required:    true,
 			Destination: &url,
 		}),
 		altsrc.NewStringFlag(&cli.StringFlag{
@@ -34,7 +32,6 @@ func main() {
 			Aliases:     []string{"t"},
 			Usage:       "认证token",
 			EnvVars:     []string{"TOKEN"},
-			Required:    true,
 			Destination: &token,
 		}),
 		altsrc.NewIntFlag(&cli.IntFlag{
@@ -42,7 +39,6 @@ func main() {
 			Usage:       "要开始导入的时间,int格式：20200318",
 			Aliases:     []string{"d"},
 			EnvVars:     []string{"DAY"},
-			Required:    true,
 			Destination: &day,
 		}),
 		altsrc.NewStringFlag(&cli.StringFlag{
@@ -50,7 +46,6 @@ func main() {
 			Aliases:     []string{"f"},
 			Usage:       "通达信的目录",
 			EnvVars:     []string{"FOLDER"},
-			Required:    true,
 			Destination: &folder,
 		}),
 	}
@@ -60,10 +55,9 @@ func main() {
 		Usage:   "该客户端抓取本地通达信数据,并提交到后台",
 		Authors: []*cli.Author{{Name: "lhn", Email: "550124023@qq.com"}},
 		Flags:   flags,
-		Before: func(context *cli.Context) error {
-			log.Debug("-----------------before")
-			return nil
-		},
+		Before: altsrc.InitInputSourceWithContext(flags, func(context *cli.Context) (context2 altsrc.InputSourceContext, e error) {
+			return altsrc.NewYamlSourceFromFile("set.yaml")
+		}),
 		Action: func(context *cli.Context) error {
 			fds := []string{filepath.Join(folder, "vipdoc/sh/lday"),
 				filepath.Join(folder, "vipdoc/sz/lday")}
