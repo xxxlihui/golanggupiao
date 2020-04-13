@@ -4,6 +4,7 @@ import (
 	"github.com/jinzhu/gorm"
 	"math"
 	"nn/data"
+	"nn/log"
 	"strings"
 )
 
@@ -80,9 +81,24 @@ func DayAnalyze(curDay *data.DayRecord) {
 	//连板天数
 	//这里无法分析
 	if curDay.Zt == 1 {
+		if curDay.Prelb > 0 {
+			log.Debug("--------")
+		}
 		curDay.Lb = curDay.Prelb + 1
 	} else {
-
+		curDay.Lb = 0
+	}
+	if curDay.Zt == 1 && Float64Compare(curDay.High, curDay.Low, 2) {
+		//一字涨停
+		curDay.Ztyz = 1
+	} else {
+		curDay.Ztyz = 0
+	}
+	if curDay.Dt == 1 && Float64Compare(curDay.High, curDay.Low, 2) {
+		//一字跌停
+		curDay.Dtyz = 1
+	} else {
+		curDay.Dtyz = 0
 	}
 	//是否是st
 	curDay.St = caseBool(strings.Index(curDay.Name, "st") > -1)
