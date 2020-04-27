@@ -2,15 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="20f5d506-7c3d-4da4-8b35-edc5b7dbc904" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/data/day_test.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/service/analyze.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/service/analyze_test.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/1b5b7e68-da37-4c47-8dd5-e6386ccb59c1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/1b5b7e68-da37-4c47-8dd5-e6386ccb59c1.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/service/userapi.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/day.go" beforeDir="false" afterPath="$PROJECT_DIR$/data/day.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/service/http.go" beforeDir="false" afterPath="$PROJECT_DIR$/service/http.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/service/service.go" beforeDir="false" afterPath="$PROJECT_DIR$/service/service.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/service/units.go" beforeDir="false" afterPath="$PROJECT_DIR$/service/units.go" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -245,22 +239,12 @@
           <expand>
             <path>
               <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
-              <item name="com.intellij.execution.services.ServiceModel$ServiceGroupNode@3523c3a2" type="7427dc5b:ServiceModel$ServiceGroupNode" />
+              <item name="com.intellij.execution.services.ServiceModel$ServiceGroupNode@7ff07ccd" type="7427dc5b:ServiceModel$ServiceGroupNode" />
             </path>
             <path>
               <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
-              <item name="com.intellij.execution.services.ServiceModel$ServiceGroupNode@3523c3a2" type="7427dc5b:ServiceModel$ServiceGroupNode" />
-              <item name="com.intellij.execution.services.ServiceModel$ServiceNode@c80b8ce" type="9fbbdea:ServiceModel$ServiceNode" />
-            </path>
-            <path>
-              <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
-              <item name="com.intellij.execution.services.ServiceModel$ServiceGroupNode@3523c3a2" type="7427dc5b:ServiceModel$ServiceGroupNode" />
-              <item name="com.intellij.execution.services.ServiceModel$ServiceNode@70d4b15a" type="9fbbdea:ServiceModel$ServiceNode" />
-            </path>
-            <path>
-              <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
-              <item name="com.intellij.execution.services.ServiceModel$ServiceGroupNode@3523c3a2" type="7427dc5b:ServiceModel$ServiceGroupNode" />
-              <item name="com.intellij.execution.services.ServiceModel$ServiceNode@23e21fcd" type="9fbbdea:ServiceModel$ServiceNode" />
+              <item name="com.intellij.execution.services.ServiceModel$ServiceGroupNode@7ff07ccd" type="7427dc5b:ServiceModel$ServiceGroupNode" />
+              <item name="com.intellij.execution.services.ServiceModel$ServiceNode@77fb6677" type="9fbbdea:ServiceModel$ServiceNode" />
             </path>
           </expand>
           <select />
@@ -290,7 +274,8 @@
     <MESSAGE value="使用新浪的接口进行获取实时数据,用本地的通达信日数据来做每日的归总处理" />
     <MESSAGE value="111" />
     <MESSAGE value="完成通达信导入客户端" />
-    <option name="LAST_COMMIT_MESSAGE" value="完成通达信导入客户端" />
+    <MESSAGE value="完成导入和导入后分析处理，下一步添加实时分析处理" />
+    <option name="LAST_COMMIT_MESSAGE" value="完成导入和导入后分析处理，下一步添加实时分析处理" />
   </component>
   <component name="VgoProject">
     <integration-enabled>true</integration-enabled>
@@ -318,11 +303,6 @@
           <url>file://$PROJECT_DIR$/service/analyze.go</url>
           <line>21</line>
           <option name="timeStamp" value="21" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/service/service.go</url>
-          <line>93</line>
-          <option name="timeStamp" value="25" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

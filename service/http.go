@@ -9,5 +9,6 @@ func StartServer(addr string) error {
 	apiGroup := app.Group("/api")
 	apiGroup.POST("/import", ImportData)
 	apiGroup.GET("/dayStatAnalyze", DayStatAnalyze)
+	apiGroup.POST("/getDayStat", GetDayStat)
 	return app.Run(addr)
 }
