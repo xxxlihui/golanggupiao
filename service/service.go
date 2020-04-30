@@ -1,6 +1,7 @@
 package service
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"nn/data"
 	"nn/log"
@@ -29,6 +30,9 @@ limit 1`, r.Day, r.Code).Scan(&preRecord)
 		r.Prelb = preRecord.Lb
 		DayAnalyze(r)
 		log.Debug("-----保存数据:%+v", r)
+		if r.Day == 20200410 && r.Code == "sh600030" {
+			fmt.Printf("---")
+		}
 		rst = GetDB().Save(&r)
 		checkError(rst.Error)
 	}
@@ -43,7 +47,7 @@ func analyzeDay(startDay int) {
 	//统计非连板数据
 	sql1 := `insert
 into day_stats
-(day, zt, dt, dm, pb, a20, fb, dr, fcr, tp, ztyz, dtyz)
+(day, zt, dt, dm, pb, a20, fb, dr, fcr, tp, ztyz, dtyz,z,d)
 select day,
        sum(zt)   zt,
        sum(dt)   dt,
@@ -55,7 +59,9 @@ select day,
        sum(fcr)  fcr,
        sum(tp)   tp,
        sum(ztyz) ztyz,
-       sum(dtyz) dtyz
+       sum(dtyz) dtyz,
+       sum(case when zf>0 then 1 else 0 end) z,
+       sum(case when zf<0 then 1 else 0 end) d
 from day_records
 where day >= ?
 group by day
@@ -71,7 +77,9 @@ on conflict (day)
                   tp=excluded.tp,
                   dtyz=excluded.dtyz,
                   dm=excluded.dm,
-                  dr=excluded.dr`
+                  dr=excluded.dr,
+                  z=excluded.z,
+                  d=excluded.d`
 	rs := GetDB().Exec(sql1, startDay)
 	checkDbError(rs.Error)
 	//统计连板数据,加入市场最高板和市场第二高板

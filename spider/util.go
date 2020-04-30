@@ -35,6 +35,7 @@ func GetResponseBytes(rspFunc ResponseFunc) ([]byte, http.Header, *http.Response
 	}
 	return _body, rsp.Header, rsp, nil
 }
+
 func GetResponseString(transCodeFunc TransCodeFunc, rspFunc ResponseFunc) (string, http.Header, *http.Response, error) {
 	_body, _header, rsp, err := GetResponseBytes(rspFunc)
 	if err != nil {
@@ -45,6 +46,7 @@ func GetResponseString(transCodeFunc TransCodeFunc, rspFunc ResponseFunc) (strin
 	}
 	return string(_body), _header, rsp, nil
 }
+
 func GetResponseGoqueryDoc(rspFunc ResponseFunc) (*goquery.Document, http.Header, *http.Response, error) {
 	rsp, err := rspFunc()
 	if err != nil {

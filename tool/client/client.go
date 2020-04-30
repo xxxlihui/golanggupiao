@@ -162,20 +162,20 @@ func readDay(bys []byte) (record *data.DayRecord, err error) {
 	record.Day = int(k)
 	err = binary.Read(buf, binary.LittleEndian, &k)
 	checkErr(err)
-	record.Open = float64(k) / 100
+	record.Open = int(k)
 	err = binary.Read(buf, binary.LittleEndian, &k)
 	checkErr(err)
-	record.High = float64(k) / 100
+	record.High = int(k)
 	err = binary.Read(buf, binary.LittleEndian, &k)
 	checkErr(err)
-	record.Low = float64(k) / 100
+	record.Low = int(k)
 	err = binary.Read(buf, binary.LittleEndian, &k)
 	checkErr(err)
-	record.Close = float64(k) / 100
+	record.Close = int(k)
 	var f float32
 	err = binary.Read(buf, binary.LittleEndian, &f)
 	checkErr(err)
-	record.Amount = float64(f)
+	record.Amount = uint64(f * 100)
 	err = binary.Read(buf, binary.LittleEndian, &k)
 	checkErr(err)
 	record.Vol = uint64(k)
