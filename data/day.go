@@ -16,7 +16,7 @@ type DayRecord struct {
 	Ztj      int    `json:"ztj" `                       //涨停价
 	Zt       int8   `json:"zt" gorm:"type:smallint"`    //是否涨停
 	Dt       int8   `json:"dt" gorm:"type:smallint"`    //是否跌停
-	Dtj      int    `json:"dtj" `                       //跌停价                              //是否跌停
+	Dtj      int    `json:"dtj" `                       //跌停价
 	Zf       int    `json:"zf"`                         //涨幅
 	Zenf     int    `json:"zenf"`                       //振幅
 	Dm       int8   `json:"dm"  gorm:"type:smallint"`   //大面
@@ -69,4 +69,51 @@ type DayZt struct {
 //分组
 type Follows struct {
 	Name string `json:"name" gorm:"type:text"`
+}
+//实时数据
+type RealData struct {
+	//代码
+	Code string `json:"code"`
+	//名称
+	Name string `json:"name"`
+	//最新价
+	Close int64 `json:"close"`
+	//涨幅
+	ChangePercent int64 `json:"changePercent"`
+	//涨跌额
+	Change int64 `json:"change"`
+	//成交量(手)
+	Volume int64 `json:"volume"`
+	//成交额
+	Amount int64 `json:"amount"`
+	//振幅
+	Amplitude int64 `json:"amplitude"`
+	//最高
+	High int64 `json:"high"`
+	//最低
+	Low int64 `json:"low"`
+	//今开
+	Open int64 `json:"open"`
+	//昨收
+	PreviousClose int64 `json:"previousClose"`
+	//量比
+	VolumeRate int64 `json:"volumeRate"`
+	//换手率
+	TurnoverRate int64 `json:"turnoverRate"`
+	//市净率
+	PB int64 `json:"pb"`
+	//市盈率(动态)
+	PERation int64 `json:"peRation"`
+	//总市值
+	TotalValue int64 `json:"totalValue"`
+	//流通市值
+	CurrentValue int64 `json:"currentValue"`
+	//60日涨跌幅
+	Amplitude60 int64 `json:"amplitude60"`
+	//年初至今涨跌幅
+	Amplitude360 int64 `json:"amplitude360"`
+	//涨速
+	Speed int64 `json:"speed"`
+	//5分钟涨跌
+	Speed5 int64 `json:"speed5"`
 }

@@ -4,6 +4,7 @@ import (
 	"github.com/jinzhu/gorm"
 	"nn/data"
 	"nn/log"
+	"nn/util"
 	"strings"
 )
 
@@ -29,40 +30,40 @@ func caseBool(b bool) int8 {
 func DayAnalyze(curDay *data.DayRecord) {
 	if curDay.PreClose == 0 {
 		//涨幅
-		curDay.Zf = FloatDiv(curDay.Close-curDay.Open, curDay.Open, 4)
+		curDay.Zf = util.FloatDiv(curDay.Close-curDay.Open, curDay.Open, 4)
 		//振幅
-		curDay.Zenf = FloatDiv(curDay.High-curDay.Close, curDay.Open, 4)
+		curDay.Zenf = util.FloatDiv(curDay.High-curDay.Close, curDay.Open, 4)
 		//涨停价
-		curDay.Ztj = FloatMul(curDay.Open, 110, 2)
+		curDay.Ztj = util.FloatMul(curDay.Open, 110, 2)
 		//跌停价
-		curDay.Dtj = FloatMul(curDay.Open, 90, 2)
+		curDay.Dtj = util.FloatMul(curDay.Open, 90, 2)
 		//涨停
 		curDay.Zt = caseBool(curDay.Ztj == curDay.Close)
 		//跌停
 		curDay.Dt = caseBool(curDay.Dtj == curDay.Close)
 		//大面
-		curDay.Dm = caseBool(FloatDiv(curDay.High-curDay.Close, curDay.Close, 2) >= 10 || curDay.Dt == 1)
+		curDay.Dm = caseBool(util.FloatDiv(curDay.High-curDay.Close, curDay.Close, 2) >= 10 || curDay.Dt == 1)
 		//大肉
-		curDay.Dr = caseBool(FloatDiv(curDay.Close-curDay.Low, curDay.Low, 2) >= 10 || curDay.Zt == 1)
+		curDay.Dr = caseBool(util.FloatDiv(curDay.Close-curDay.Low, curDay.Low, 2) >= 10 || curDay.Zt == 1)
 		//破板
 		curDay.Pb = caseBool(curDay.High == curDay.Ztj && curDay.Zt == 0)
 	} else {
 		//涨幅
-		curDay.Zf = FloatDiv(curDay.Close-curDay.PreClose, curDay.PreClose, 4)
+		curDay.Zf = util.FloatDiv(curDay.Close-curDay.PreClose, curDay.PreClose, 4)
 		//振幅
-		curDay.Zenf = FloatDiv(curDay.High-curDay.Low, curDay.PreClose, 4)
+		curDay.Zenf = util.FloatDiv(curDay.High-curDay.Low, curDay.PreClose, 4)
 		//涨停价
-		curDay.Ztj = FloatMul(curDay.PreClose, 110, 2)
+		curDay.Ztj = util.FloatMul(curDay.PreClose, 110, 2)
 		//跌停价
-		curDay.Dtj = FloatMul(curDay.PreClose, 90, 2)
+		curDay.Dtj = util.FloatMul(curDay.PreClose, 90, 2)
 		//涨停
 		curDay.Zt = caseBool(curDay.Ztj == curDay.Close)
 		//跌停
 		curDay.Dt = caseBool(curDay.Dtj == curDay.Close)
 		//大面
-		curDay.Dm = caseBool(FloatDiv(curDay.High-curDay.Close, curDay.Close, 2) >= 10 || curDay.Dt == 1)
+		curDay.Dm = caseBool(util.FloatDiv(curDay.High-curDay.Close, curDay.Close, 2) >= 10 || curDay.Dt == 1)
 		//大肉
-		curDay.Dr = caseBool(FloatDiv(curDay.Close-curDay.Low, curDay.Low, 2) >= 10 || curDay.Zt == 1)
+		curDay.Dr = caseBool(util.FloatDiv(curDay.Close-curDay.Low, curDay.Low, 2) >= 10 || curDay.Zt == 1)
 		//破板
 		curDay.Pb = caseBool(curDay.High == curDay.Ztj && curDay.Zt == 0)
 	}
