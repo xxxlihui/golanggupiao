@@ -25,7 +25,7 @@ func GetReal() ([]*data.RealData, error) {
 	_data := &struct {
 		Data *struct {
 			Diff []*Data `json:"diff"`
-		} `json:"_data"`
+		} `json:"data"`
 	}{}
 	_json = strings.ReplaceAll(_json, `"-"`, "0")
 	err = json.Unmarshal([]byte(_json), &_data)
@@ -89,18 +89,20 @@ type Data struct {
 
 func toRealData(_data *Data) *data.RealData {
 	return &data.RealData{
-		Code:          _data.Code,
-		Name:          _data.Name,
-		Close:         util.Float64TInt64(_data.Close, 2),
+		DayBase: &data.DayBase{
+			Code:     _data.Code,
+			Name:     _data.Name,
+			Close:    int(util.Float64TInt64(_data.Close, 2)),
+			Vol:      uint64(_data.Volume),
+			Amount:   uint64(util.Float64TInt64(_data.Amount, 2)),
+			High:     int(util.Float64TInt64(_data.High, 2)),
+			Low:      int(util.Float64TInt64(_data.Low, 2)),
+			Open:     int(util.Float64TInt64(_data.Open, 2)),
+			PreClose: int(util.Float64TInt64(_data.PreviousClose, 2)),
+		},
 		ChangePercent: util.Float64TInt64(_data.ChangePercent, 2),
 		Change:        util.Float64TInt64(_data.Change, 2),
-		Volume:        _data.Volume,
-		Amount:        util.Float64TInt64(_data.Amount, 2),
 		Amplitude:     util.Float64TInt64(_data.Amplitude, 2),
-		High:          util.Float64TInt64(_data.High, 2),
-		Low:           util.Float64TInt64(_data.Low, 2),
-		Open:          util.Float64TInt64(_data.Open, 2),
-		PreviousClose: util.Float64TInt64(_data.PreviousClose, 2),
 		VolumeRate:    util.Float64TInt64(_data.VolumeRate, 2),
 		TurnoverRate:  util.Float64TInt64(_data.TurnoverRate, 2),
 		PB:            util.Float64TInt64(_data.PB, 2),

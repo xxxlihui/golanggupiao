@@ -5,6 +5,7 @@ go 1.14
 require (
 	github.com/360EntSecGroup-Skylar/excelize/v2 v2.1.0
 	github.com/PuerkitoBio/goquery v1.5.1
+	github.com/ahmetb/go-linq v3.0.0+incompatible // indirect
 	github.com/gin-gonic/gin v1.5.0
 	github.com/go-playground/universal-translator v0.17.0 // indirect
 	github.com/golang/protobuf v1.3.4 // indirect
