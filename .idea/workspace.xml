@@ -2,24 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="20f5d506-7c3d-4da4-8b35-edc5b7dbc904" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/chans/real.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/datas.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/oneRecordDays.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/real/real.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/1b5b7e68-da37-4c47-8dd5-e6386ccb59c1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/1b5b7e68-da37-4c47-8dd5-e6386ccb59c1.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/errors.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/global.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/util/dateime.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/util/datetime_test.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/crawler/dongfangcaifu/realdata.go" beforeDir="false" afterPath="$PROJECT_DIR$/crawler/dongfangcaifu/realdata.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/crawler/dongfangcaifu/realdata_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/crawler/dongfangcaifu/realdata_test.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/day.go" beforeDir="false" afterPath="$PROJECT_DIR$/data/day.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/info.go" beforeDir="false" afterPath="$PROJECT_DIR$/data/info.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/real/data.go" beforeDir="false" afterPath="$PROJECT_DIR$/structs/pool.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/service/analyze.go" beforeDir="false" afterPath="$PROJECT_DIR$/service/analyze.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/service/cacle.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/service/real.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/service/service.go" beforeDir="false" afterPath="$PROJECT_DIR$/service/import_api.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/datas.go" beforeDir="false" afterPath="$PROJECT_DIR$/data/datas.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -78,7 +66,7 @@
       <recent name="$PROJECT_DIR$/data" />
     </key>
   </component>
-  <component name="RunManager" selected="Go Build.server">
+  <component name="RunManager" selected="Go Test.TestDiffNowIntDay in nn/util">
     <configuration name="server" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true">
       <module name="nn" />
       <working_directory value="$PROJECT_DIR$" />
@@ -93,7 +81,7 @@
       <directory value="$PROJECT_DIR$/" />
       <method v="2" />
     </configuration>
-    <configuration name="TestFloat32TInt in nn/util" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+    <configuration name="TestDiffIntDay in nn/util" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
       <module name="nn" />
       <working_directory value="$PROJECT_DIR$/util" />
       <framework value="gotest" />
@@ -101,18 +89,29 @@
       <package value="nn/util" />
       <directory value="$PROJECT_DIR$/" />
       <filePath value="$PROJECT_DIR$/" />
-      <pattern value="^TestFloat32TInt$" />
+      <pattern value="^TestDiffIntDay$" />
       <method v="2" />
     </configuration>
-    <configuration name="TestGetList in nn/crawler/shenzhen" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+    <configuration name="TestDiffNowIntDay in nn/util" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
       <module name="nn" />
-      <working_directory value="$PROJECT_DIR$/crawler/shenzhen" />
+      <working_directory value="$PROJECT_DIR$/util" />
       <framework value="gotest" />
       <kind value="PACKAGE" />
-      <package value="nn/crawler/shenzhen" />
+      <package value="nn/util" />
       <directory value="$PROJECT_DIR$/" />
       <filePath value="$PROJECT_DIR$/" />
-      <pattern value="^TestGetList$" />
+      <pattern value="^TestDiffNowIntDay$" />
+      <method v="2" />
+    </configuration>
+    <configuration name="TestFromIntDay in nn/util" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="nn" />
+      <working_directory value="$PROJECT_DIR$/util" />
+      <framework value="gotest" />
+      <kind value="PACKAGE" />
+      <package value="nn/util" />
+      <directory value="$PROJECT_DIR$/" />
+      <filePath value="$PROJECT_DIR$/" />
+      <pattern value="^TestFromIntDay$" />
       <method v="2" />
     </configuration>
     <configuration name="TestGetReal in nn/crawler/dongfangcaifu" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
@@ -126,31 +125,20 @@
       <pattern value="^TestGetReal$" />
       <method v="2" />
     </configuration>
-    <configuration name="TestGetRealData in nn/crawler/shanghai" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
-      <module name="nn" />
-      <working_directory value="$PROJECT_DIR$/crawler/shanghai" />
-      <framework value="gotest" />
-      <kind value="PACKAGE" />
-      <package value="nn/crawler/shanghai" />
-      <directory value="$PROJECT_DIR$/" />
-      <filePath value="$PROJECT_DIR$/" />
-      <pattern value="^TestGetRealData$" />
-      <method v="2" />
-    </configuration>
     <list>
       <item itemvalue="Go Build.server" />
-      <item itemvalue="Go Test.TestGetRealData in nn/crawler/shanghai" />
-      <item itemvalue="Go Test.TestFloat32TInt in nn/util" />
-      <item itemvalue="Go Test.TestGetList in nn/crawler/shenzhen" />
       <item itemvalue="Go Test.TestGetReal in nn/crawler/dongfangcaifu" />
+      <item itemvalue="Go Test.TestFromIntDay in nn/util" />
+      <item itemvalue="Go Test.TestDiffIntDay in nn/util" />
+      <item itemvalue="Go Test.TestDiffNowIntDay in nn/util" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Go Test.TestDiffNowIntDay in nn/util" />
+        <item itemvalue="Go Test.TestDiffIntDay in nn/util" />
+        <item itemvalue="Go Test.TestFromIntDay in nn/util" />
         <item itemvalue="Go Build.server" />
         <item itemvalue="Go Test.TestGetReal in nn/crawler/dongfangcaifu" />
-        <item itemvalue="Go Test.TestGetList in nn/crawler/shenzhen" />
-        <item itemvalue="Go Test.TestGetRealData in nn/crawler/shanghai" />
-        <item itemvalue="Go Test.TestFloat32TInt in nn/util" />
       </list>
     </recent_temporary>
   </component>
@@ -209,14 +197,14 @@
       <screen x="0" y="0" width="1920" height="1037" />
     </state>
     <state x="647" y="247" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.1920.1037@0.0.1920.1037" timestamp="1588834362052" />
-    <state x="722" y="254" key="#xdebugger.evaluate" timestamp="1588837338136">
+    <state x="722" y="254" key="#xdebugger.evaluate" timestamp="1590485268248">
       <screen x="0" y="0" width="1920" height="1037" />
     </state>
-    <state x="722" y="254" key="#xdebugger.evaluate/0.0.1920.1037@0.0.1920.1037" timestamp="1588837338136" />
-    <state x="443" y="33" key="CommitChangelistDialog2" timestamp="1588857433736">
+    <state x="722" y="254" key="#xdebugger.evaluate/0.0.1920.1037@0.0.1920.1037" timestamp="1590485268248" />
+    <state x="443" y="33" key="CommitChangelistDialog2" timestamp="1590412384931">
       <screen x="0" y="0" width="1920" height="1037" />
     </state>
-    <state x="443" y="33" key="CommitChangelistDialog2/0.0.1920.1037@0.0.1920.1037" timestamp="1588857433736" />
+    <state x="443" y="33" key="CommitChangelistDialog2/0.0.1920.1037@0.0.1920.1037" timestamp="1590412384931" />
     <state width="880" height="538" key="DebuggerActiveHint" timestamp="1588848746892">
       <screen x="0" y="0" width="1920" height="1037" />
     </state>
@@ -225,46 +213,46 @@
       <screen x="0" y="0" width="1920" height="1037" />
     </state>
     <state x="725" y="270" key="FileChooserDialogImpl/0.0.1920.1037@0.0.1920.1037" timestamp="1590222125350" />
-    <state width="1872" height="553" key="GridCell.Tab.0.bottom" timestamp="1590405893678">
+    <state width="1872" height="456" key="GridCell.Tab.0.bottom" timestamp="1590485823119">
       <screen x="0" y="0" width="1920" height="1037" />
     </state>
-    <state width="1872" height="553" key="GridCell.Tab.0.bottom/0.0.1920.1037@0.0.1920.1037" timestamp="1590405893678" />
-    <state width="1872" height="553" key="GridCell.Tab.0.center" timestamp="1590405893677">
+    <state width="1872" height="456" key="GridCell.Tab.0.bottom/0.0.1920.1037@0.0.1920.1037" timestamp="1590485823119" />
+    <state width="1872" height="456" key="GridCell.Tab.0.center" timestamp="1590485823118">
       <screen x="0" y="0" width="1920" height="1037" />
     </state>
-    <state width="1872" height="553" key="GridCell.Tab.0.center/0.0.1920.1037@0.0.1920.1037" timestamp="1590405893677" />
-    <state width="1872" height="553" key="GridCell.Tab.0.left" timestamp="1590405893677">
+    <state width="1872" height="456" key="GridCell.Tab.0.center/0.0.1920.1037@0.0.1920.1037" timestamp="1590485823118" />
+    <state width="1872" height="456" key="GridCell.Tab.0.left" timestamp="1590485823118">
       <screen x="0" y="0" width="1920" height="1037" />
     </state>
-    <state width="1872" height="553" key="GridCell.Tab.0.left/0.0.1920.1037@0.0.1920.1037" timestamp="1590405893677" />
-    <state width="1872" height="553" key="GridCell.Tab.0.right" timestamp="1590405893678">
+    <state width="1872" height="456" key="GridCell.Tab.0.left/0.0.1920.1037@0.0.1920.1037" timestamp="1590485823118" />
+    <state width="1872" height="456" key="GridCell.Tab.0.right" timestamp="1590485823118">
       <screen x="0" y="0" width="1920" height="1037" />
     </state>
-    <state width="1872" height="553" key="GridCell.Tab.0.right/0.0.1920.1037@0.0.1920.1037" timestamp="1590405893677" />
-    <state width="1872" height="532" key="GridCell.Tab.1.bottom" timestamp="1590219128857">
+    <state width="1872" height="456" key="GridCell.Tab.0.right/0.0.1920.1037@0.0.1920.1037" timestamp="1590485823118" />
+    <state width="1872" height="532" key="GridCell.Tab.1.bottom" timestamp="1590485291800">
       <screen x="0" y="0" width="1920" height="1037" />
     </state>
-    <state width="1872" height="532" key="GridCell.Tab.1.bottom/0.0.1920.1037@0.0.1920.1037" timestamp="1590219128857" />
-    <state width="1872" height="532" key="GridCell.Tab.1.center" timestamp="1590219128857">
+    <state width="1872" height="532" key="GridCell.Tab.1.bottom/0.0.1920.1037@0.0.1920.1037" timestamp="1590485291800" />
+    <state width="1872" height="532" key="GridCell.Tab.1.center" timestamp="1590485291800">
       <screen x="0" y="0" width="1920" height="1037" />
     </state>
-    <state width="1872" height="532" key="GridCell.Tab.1.center/0.0.1920.1037@0.0.1920.1037" timestamp="1590219128857" />
-    <state width="1872" height="532" key="GridCell.Tab.1.left" timestamp="1590219128857">
+    <state width="1872" height="532" key="GridCell.Tab.1.center/0.0.1920.1037@0.0.1920.1037" timestamp="1590485291800" />
+    <state width="1872" height="532" key="GridCell.Tab.1.left" timestamp="1590485291799">
       <screen x="0" y="0" width="1920" height="1037" />
     </state>
-    <state width="1872" height="532" key="GridCell.Tab.1.left/0.0.1920.1037@0.0.1920.1037" timestamp="1590219128857" />
-    <state width="1872" height="532" key="GridCell.Tab.1.right" timestamp="1590219128857">
+    <state width="1872" height="532" key="GridCell.Tab.1.left/0.0.1920.1037@0.0.1920.1037" timestamp="1590485291799" />
+    <state width="1872" height="532" key="GridCell.Tab.1.right" timestamp="1590485291800">
       <screen x="0" y="0" width="1920" height="1037" />
     </state>
-    <state width="1872" height="532" key="GridCell.Tab.1.right/0.0.1920.1037@0.0.1920.1037" timestamp="1590219128857" />
-    <state width="636" height="447" key="SwitcherDM" timestamp="1590377141358">
+    <state width="1872" height="532" key="GridCell.Tab.1.right/0.0.1920.1037@0.0.1920.1037" timestamp="1590485291800" />
+    <state width="636" height="447" key="SwitcherDM" timestamp="1590484458023">
       <screen x="0" y="0" width="1920" height="1037" />
     </state>
-    <state width="636" height="447" key="SwitcherDM/0.0.1920.1037@0.0.1920.1037" timestamp="1590377141358" />
-    <state x="559" y="248" key="Vcs.Push.Dialog.v2" timestamp="1588857435613">
+    <state width="636" height="447" key="SwitcherDM/0.0.1920.1037@0.0.1920.1037" timestamp="1590484458023" />
+    <state x="559" y="248" key="Vcs.Push.Dialog.v2" timestamp="1590412409943">
       <screen x="0" y="0" width="1920" height="1037" />
     </state>
-    <state x="559" y="248" key="Vcs.Push.Dialog.v2/0.0.1920.1037@0.0.1920.1037" timestamp="1588857435613" />
+    <state x="559" y="248" key="Vcs.Push.Dialog.v2/0.0.1920.1037@0.0.1920.1037" timestamp="1590412409943" />
     <state width="961" height="519" key="XDebugger.FullValuePopup" timestamp="1590218931513">
       <screen x="0" y="0" width="1920" height="1037" />
     </state>
@@ -281,10 +269,10 @@
       <screen x="0" y="0" width="1920" height="1037" />
     </state>
     <state x="803" y="125" width="602" height="787" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/0.0.1920.1037@0.0.1920.1037" timestamp="1590222098230" />
-    <state width="580" height="254" key="javadoc.popup.new" timestamp="1590389363694">
+    <state width="580" height="254" key="javadoc.popup.new" timestamp="1590485524938">
       <screen x="0" y="0" width="1920" height="1037" />
     </state>
-    <state width="580" height="254" key="javadoc.popup.new/0.0.1920.1037@0.0.1920.1037" timestamp="1590389363694" />
+    <state width="580" height="254" key="javadoc.popup.new/0.0.1920.1037@0.0.1920.1037" timestamp="1590485524938" />
     <state x="623" y="228" width="672" height="678" key="search.everywhere.popup" timestamp="1590406868298">
       <screen x="0" y="0" width="1920" height="1037" />
     </state>
