@@ -12,7 +12,6 @@ import (
 	"net/http/cookiejar"
 	"net/url"
 	"strings"
-	"time"
 )
 
 //对httpClient的简单封装使得httpClient简单使用，并支持cookie
@@ -120,10 +119,10 @@ func (c *Client) Do(referer string, req *http.Request, ctx context.Context) (*ht
 		req = _req
 	}
 	if ctx == nil {
-		ctx = req.Context()
+
+	} else {
+		req = req.WithContext(ctx)
 	}
-	ctx, _ = context.WithTimeout(ctx, 2*time.Minute)
-	req = req.WithContext(ctx)
 	rsp, err := c.Client.Do(req)
 	if c.OnResponse != nil {
 		c.OnResponse(rsp, err)
