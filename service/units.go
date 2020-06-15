@@ -2,9 +2,9 @@ package service
 
 import (
 	"github.com/jinzhu/gorm"
-	"math"
 	"nn/data"
 	"nn/log"
+	"nn/util"
 	"strings"
 )
 
@@ -18,20 +18,7 @@ func checkDbError(err error) {
 		panic(err)
 	}
 }
-func FloatCompare(f1, f2 float32, precision float64) bool {
-	return Float64Compare(float64(f1), float64(f2), precision)
-}
-func Float64Round(f1, precision float64) float64 {
-	return math.Round(f1*math.Pow(10, precision)) * math.Pow(0.1, precision)
-}
-func FloatRound(f1 float32, precision float64) float64 {
-	return Float64Round(float64(f1), precision)
-}
-func Float64Compare(f1, f2 float64, precision float64) bool {
-	n1 := math.Floor(math.Round(f1 * math.Pow(10, precision)))
-	n2 := math.Floor(math.Round(f2 * math.Pow(10, precision)))
-	return n1 == n2
-}
+
 func caseBool(b bool) int8 {
 	if b {
 		return 1
@@ -41,43 +28,47 @@ func caseBool(b bool) int8 {
 
 //分析当日的情况
 func DayAnalyze(curDay *data.DayRecord) {
-	if Float64Compare(curDay.PreClose, 0, 2) {
+	if curDay.PreClose == 0 {
 		//涨幅
-		curDay.Zf = (curDay.Close - curDay.Open) / curDay.Open
+		curDay.Zf = util.FloatDiv(curDay.Close-curDay.Open, curDay.Open, 4)
+		//振幅
+		curDay.Zenf = util.FloatDiv(curDay.High-curDay.Close, curDay.Open, 4)
 		//涨停价
-		curDay.Ztj = Float64Round(curDay.Open*1.1, 2)
+		curDay.Ztj = util.FloatMul(curDay.Open, 110, 2)
 		//跌停价
-		curDay.Dtj = Float64Round(curDay.Open*0.9, 2)
+		curDay.Dtj = util.FloatMul(curDay.Open, 90, 2)
 		//涨停
-		curDay.Zt = caseBool(Float64Compare(curDay.Ztj, curDay.Close, 2))
+		curDay.Zt = caseBool(curDay.Ztj == curDay.Close)
 		//跌停
-		curDay.Dt = caseBool(Float64Compare(curDay.Dtj, curDay.Close, 2))
+		curDay.Dt = caseBool(curDay.Dtj == curDay.Close)
 		//大面
-		curDay.Dm = caseBool((curDay.High-curDay.Close)/curDay.Close >= 0.1 || curDay.Dt == 1)
+		curDay.Dm = caseBool(util.FloatDiv(curDay.High-curDay.Close, curDay.Close, 2) >= 10 || curDay.Dt == 1)
 		//大肉
-		curDay.Dr = caseBool((curDay.Close-curDay.Low)/curDay.Low >= 0.1 || curDay.Zt == 1)
+		curDay.Dr = caseBool(util.FloatDiv(curDay.Close-curDay.Low, curDay.Low, 2) >= 10 || curDay.Zt == 1)
 		//破板
-		curDay.Pb = caseBool(true == (Float64Compare(curDay.High, curDay.Ztj, 2) && curDay.Zt == 0))
+		curDay.Pb = caseBool(curDay.High == curDay.Ztj && curDay.Zt == 0)
 	} else {
 		//涨幅
-		curDay.Zf = (curDay.Close - curDay.PreClose) / curDay.Open
+		curDay.Zf = util.FloatDiv(curDay.Close-curDay.PreClose, curDay.PreClose, 4)
+		//振幅
+		curDay.Zenf = util.FloatDiv(curDay.High-curDay.Low, curDay.PreClose, 4)
 		//涨停价
-		curDay.Ztj = Float64Round(curDay.PreClose*1.1, 2)
+		curDay.Ztj = util.FloatMul(curDay.PreClose, 110, 2)
 		//跌停价
-		curDay.Dtj = Float64Round(curDay.PreClose*0.9, 2)
+		curDay.Dtj = util.FloatMul(curDay.PreClose, 90, 2)
 		//涨停
-		curDay.Zt = caseBool(Float64Compare(curDay.Ztj, curDay.Close, 2))
+		curDay.Zt = caseBool(curDay.Ztj == curDay.Close)
 		//跌停
-		curDay.Dt = caseBool(Float64Compare(curDay.Dtj, curDay.Close, 2))
+		curDay.Dt = caseBool(curDay.Dtj == curDay.Close)
 		//大面
-		curDay.Dm = caseBool(((curDay.High-curDay.Close)/curDay.Close >= 0.1 || curDay.Dt == 1))
+		curDay.Dm = caseBool(util.FloatDiv(curDay.High-curDay.Close, curDay.Close, 2) >= 10 || curDay.Dt == 1)
 		//大肉
-		curDay.Dr = caseBool((curDay.Close-curDay.Low)/curDay.Low >= 0.1 || curDay.Zt == 1)
+		curDay.Dr = caseBool(util.FloatDiv(curDay.Close-curDay.Low, curDay.Low, 2) >= 10 || curDay.Zt == 1)
 		//破板
-		curDay.Pb = caseBool(Float64Compare(curDay.High, curDay.Ztj, 2) && curDay.Zt == 0)
+		curDay.Pb = caseBool(curDay.High == curDay.Ztj && curDay.Zt == 0)
 	}
 	//成交额大于20亿
-	curDay.A20 = caseBool(curDay.Amount >= 20*10000*10000)
+	curDay.A20 = caseBool(curDay.Amount >= 20*10000*10000*100)
 	//连板天数
 	//这里无法分析
 	if curDay.Zt == 1 {
@@ -88,13 +79,13 @@ func DayAnalyze(curDay *data.DayRecord) {
 	} else {
 		curDay.Lb = 0
 	}
-	if curDay.Zt == 1 && Float64Compare(curDay.High, curDay.Low, 2) {
+	if curDay.Zt == 1 && curDay.High == curDay.Low {
 		//一字涨停
 		curDay.Ztyz = 1
 	} else {
 		curDay.Ztyz = 0
 	}
-	if curDay.Dt == 1 && Float64Compare(curDay.High, curDay.Low, 2) {
+	if curDay.Dt == 1 && curDay.High == curDay.Low {
 		//一字跌停
 		curDay.Dtyz = 1
 	} else {

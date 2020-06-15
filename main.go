@@ -6,7 +6,11 @@ import (
 	"os"
 )
 
+func init()  {
+	os.Setenv("TZ","Etc/GMT+8")
+}
 func main() {
+
 	app := cli.App{
 		Name:    "股票数据后台",
 		Version: "1.0",
@@ -60,6 +64,7 @@ func main() {
 				context.String("db_name"),
 				context.Int("db_port"),
 			)
+
 			return service.StartServer(context.String("port"))
 		},
 	}
