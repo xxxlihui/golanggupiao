@@ -1,8 +1,12 @@
 package dongfangcaifu
 
-import "testing"
+import (
+	"nn/data"
+	"testing"
+)
 
 func TestGetReal(t *testing.T) {
-	rt,err:=GetReal()
-	print(rt,err)
+	d1 := data.Day{Day: 20200203}
+	d2 := data.Day{Day: 20200203}
+	t.Logf("d1==d2,%v", d1 == d2)
 }
