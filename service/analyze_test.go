@@ -12,6 +12,6 @@ func TestLoadDaysToCache(t *testing.T) {
 		"gupiao",
 		30002,
 	)
-	LoadDaysToCache()
+	//LoadDaysToCache()
 
 }

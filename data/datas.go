@@ -46,13 +46,13 @@ func (this *Data) GetLaunchDate(code string) (int, error) {
 }
 
 //获取上市天数
-func (this *Data) GetDayCount(code string) (int, error) {
+/*func (this *Data) GetDayCount(code string) (int, error) {
 	launchData, err := this.GetLaunchDate(code)
 	if err != nil {
 		return 0, err
 	}
-	
-}
+
+}*/
 func EmptyData() *Data {
 	return &Data{
 		Records:   make(map[string]*OneRecordDays),

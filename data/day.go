@@ -6,12 +6,12 @@ type DayBase struct {
 	Open     int    `json:"open"`
 	Code     string `json:"code" gorm:"type:varchar(8);PRIMARY_KEY"`
 	Name     string `json:"name" gorm:"type:varchar(5)"`
-	High     int    `json:"high" `     //最高
-	Low      int    `json:"low" `      //最低
-	Close    int    `json:"close" `    //收盘
-	PreClose int    `json:"preClose" ` //上一个交易日收盘价收盘
-	Vol      uint64 `json:"vol"`       //成交量
-	Amount   uint64 `json:"amount"`    //成交额
+	High     int    `json:"high" `    //最高
+	Low      int    `json:"low" `     //最低
+	Close    int    `json:"close" `   //收盘
+	PreClose int    `json:"preClose"` //`json:"preClose" ` //上一个交易日收盘价收盘
+	Vol      uint64 `json:"vol"`      //成交量
+	Amount   uint64 `json:"amount"`   //成交额
 }
 
 type DayRecord struct {
