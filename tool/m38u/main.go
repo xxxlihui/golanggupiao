@@ -6,6 +6,7 @@ import (
 	"golang.org/x/net/context"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 	"nn/spider"
 	"os"
 	"path/filepath"
@@ -57,15 +58,15 @@ func main() {
 	app.Run(os.Args)
 }
 
-func down(url, dir string, thread int) {
-	list, err := getList(url)
+func down(_url, dir string, thread int) {
+	list, err := getList(_url)
 	if err != nil {
 		println("下载错误", err.Error())
 		return
 	}
-	l := strings.LastIndex(url, "/")
-	name := url[l+1 : len(url)-5]
-	pfx := url[:l+1]
+	l := strings.LastIndex(_url, "/")
+	name := _url[l+1 : len(_url)-5]
+	//pfx := _url[:l+1]
 	total := len(list)
 	tr := thread
 	chans := make(chan *item, tr)
@@ -77,7 +78,9 @@ func down(url, dir string, thread int) {
 				item := <-chans
 				for {
 					println("下载", item.name)
-					err := downLoadOne(pfx+item.name, dir, name, item)
+					u, _ := url.Parse(_url)
+					u2, _ := u.Parse(item.name)
+					err := downLoadOne(u2.String(), dir, name, item)
 					if err != nil {
 						println(item.name, "下载失败")
 					} else {
@@ -126,6 +129,7 @@ func down(url, dir string, thread int) {
 	}
 	//合并文件
 	merge(list, dir, name)
+	os.RemoveAll(dir)
 	println("下载完成")
 }
 
@@ -138,7 +142,7 @@ func merge(items []*item, dir, name string) {
 		return
 	}
 	for _, v := range items {
-		pth := filepath.Join(dir, name, v.name)
+		pth := filepath.Join(dir, name, v.Name())
 		bys, err := ioutil.ReadFile(pth)
 		if err != nil {
 			println("读取子文件失败", err.Error())
@@ -160,7 +164,7 @@ func write(bys []byte, pth string) error {
 }
 
 func downLoadOne(url, dir, name string, item *item) error {
-	pth := filepath.Join(dir, name, item.name)
+	pth := filepath.Join(dir, name, item.Name())
 	info, err := os.Stat(pth)
 	if err == nil {
 		if info.Size() > 0 {
@@ -214,6 +218,13 @@ type item struct {
 	//lock   sync.Mutex
 }
 
+func (this *item) Name() string {
+	idx := strings.LastIndex(this.name, "/")
+	if idx >= 0 {
+		return this.name[idx:]
+	}
+	return this.name
+}
 func (this *item) start() {
 	//this.lock.Lock()
 	this.status = 2

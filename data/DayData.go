@@ -4,17 +4,17 @@ import (
 	"github.com/shopspring/decimal"
 )
 
-type Day struct {
+type PDay struct {
 	//日期20200203格式
 	Day int `json:"day" gorm:"PRIMARY_KEY"`
 }
-type Code struct {
+type PCode struct {
 	//股票代码sh600021
 	Code string `json:"code" gorm:"type:varchar(8);PRIMARY_KEY"`
 }
 
 //日线数据
-type DayData struct {
+type PDayData struct {
 	//开盘价
 	Open decimal.Decimal `json:"open" gorm:"type:decimal(11,2)"`
 	//最高价
@@ -36,7 +36,7 @@ type DayData struct {
 }
 
 //每一只票当日的一般的指标值
-type DaySample struct {
+type PDaySample struct {
 	//涨幅
 	ChangePercent decimal.Decimal `json:"changePercent gorm:"type:decimal(11,2)"`
 	//涨幅
@@ -64,7 +64,7 @@ type DaySample struct {
 }
 
 //每一次票当日的情绪
-type DayMood struct {
+type PDayMood struct {
 	//是否跌停
 	IsLimitUp bool
 	//是否涨停
@@ -93,7 +93,7 @@ type DayMood struct {
 
 //每日复盘
 type DayReplay struct {
-	Day
+	PDay
 	//大周期
 	BigCycle int
 	//小周期
@@ -115,7 +115,8 @@ type DayReplay struct {
 	//描述
 	Description string
 	//标题
-	Title    string
+	Title string
+	//题材概念 排位
 	Concepts []*Concept
 }
 

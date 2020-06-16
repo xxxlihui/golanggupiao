@@ -1,21 +1,12 @@
 package main
 
-import "testing"
+import (
+	"net/url"
+	"testing"
+)
 
 func TestObj(t *testing.T) {
-	a := &AA{}
-	a.C = "123"
-	println(a.C)
-}
-
-type A struct {
-	C string
-}
-type B struct {
-	C string
-}
-type AA struct {
-	A
-	C string
-	B
+	u, _ := url.Parse("http://www.baidu.com/s/s/s")
+	u2, _ := u.Parse("/a/a/a")
+	t.Log(u2.String())
 }
