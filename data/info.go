@@ -5,4 +5,5 @@ type RecordInfo struct {
 	Name         string `json:"name" gorm:"varchar(20)"`            //名称
 	LaunchDate   int    `json:"launchDate"`                         //上市日期
 	DelistedDate int    `json:"delistedDate"`                       //退市日期
+
 }
