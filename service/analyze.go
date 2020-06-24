@@ -14,9 +14,9 @@ func StartReal() {
 				//进行分析
 				if t.Message != "" {
 					//转成 dayRecord格式
-					r:=&data.DayRecord{}
+					r := &data.DayRecord{}
 					for _, v := range t.Data {
-						r.DayBase=v.DayBase
+						v.Code = v.Code
 
 					}
 				}

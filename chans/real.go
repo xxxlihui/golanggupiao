@@ -4,7 +4,16 @@ import "nn/data"
 
 var RealChan = make(chan *struct {
 	Message string
-	Data    []*data.RealData
+	Data    []*struct {
+		data.PCode
+		data.PDayData
+		data.PDaySample
+	}
 }, 10)
 
-var EndChan = make(chan []*data.RealData)
+var EndChan = make(chan []*struct {
+	data.PCode
+	data.PDayData
+	data.PDaySample
+},
+)

@@ -21,8 +21,8 @@ func InitDb(host, user, password, dbname string, port int) {
 	}
 	db = _db
 	db.LogMode(true)
-	db.AutoMigrate(&data.DayRecord{}, &data.DayStat{},
-		&data.User{}, &data.Follows{}, &data.Tokens{},
+	db.AutoMigrate(&data.DayRecord{}, &data.DayRecord{},
+		&data.User{}, &data.StockInfo{}, &data.Tokens{},
 		&data.DayZt{}, //&data.Hudong{},
 	)
 }
