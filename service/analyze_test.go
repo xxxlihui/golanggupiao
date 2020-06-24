@@ -1,11 +1,12 @@
 package service
 
 import (
+	"nn/data"
 	"testing"
 )
 
 func TestLoadDaysToCache(t *testing.T) {
-	InitDb(
+	data.InitDb(
 		"server2",
 		"postgres",
 		"123",

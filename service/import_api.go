@@ -18,7 +18,7 @@ func ImportData(context *gin.Context) {
 		log.Info("导入:%+v", r)
 		//取上一条记录
 		preRecord := &data.DayRecord{}
-		rst := GetDB().Raw(
+		rst := data.GetDB().Raw(
 			`select *
 from day_records
 where day < ?
@@ -33,10 +33,11 @@ limit 1`, r.Day, r.Code).Scan(&preRecord)
 		if r.Day == 20200410 && r.Code == "sh600030" {
 			fmt.Printf("---")
 		}
-		rst = GetDB().Save(&r)
+		rst = data.GetDB().Save(&r)
 		checkError(rst.Error)
 	}
 }
+
 //触发分析数据，以后这个不用处理
 func DayStatAnalyze(ctx *gin.Context) {
 	startday := ctx.GetInt("startDay")
@@ -80,7 +81,7 @@ on conflict (day)
                   dr=excluded.dr,
                   z=excluded.z,
                   d=excluded.d`
-	rs := GetDB().Exec(sql1, startDay)
+	rs := data.GetDB().Exec(sql1, startDay)
 	checkDbError(rs.Error)
 	//统计连板数据,加入市场最高板和市场第二高板
 	sql2 := `select sum(1) c,day,lb
@@ -95,7 +96,7 @@ order by day ,lb
 		Lb  int
 	}
 	ds := make([]*d, 0)
-	rst := GetDB().Raw(sql2, startDay).Find(&ds)
+	rst := data.GetDB().Raw(sql2, startDay).Find(&ds)
 	checkDbError(rst.Error)
 	gds := make(map[int][]*d)
 	//group 分组
@@ -113,7 +114,7 @@ order by day ,lb
 			return v[i].Day < v[j].Day
 		})
 		dst := &data.DayStat{}
-		rst = GetDB().Model(&dst).Where("day=?", k).Scan(&ds)
+		rst = data.GetDB().Model(&dst).Where("day=?", k).Scan(&ds)
 		checkError(rst.Error)
 		if len(v) == 0 {
 			updateMax(0, 0, 0, 0, k)
@@ -129,7 +130,7 @@ order by day ,lb
 
 }
 func updateMax(mx, mxn, mx2, mx2n, day int) {
-	rst := GetDB().Exec("update day_stats set mx=?,mxn=?,mx2=?,mx2n=? where day=?",
+	rst := data.GetDB().Exec("update day_stats set mx=?,mxn=?,mx2=?,mx2n=? where day=?",
 		mx, mxn, mx2, mx2n, day,
 	)
 	checkError(rst.Error)

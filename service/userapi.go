@@ -11,6 +11,6 @@ func GetDayStat(context *gin.Context) {
 	}{}
 	checkError(context.BindJSON(&param))
 	dayStats := make([]data.DayStat, 0)
-	GetDB().Order("day").Where("day>=?", param.StartTime).Find(&dayStats)
+	data.GetDB().Order("day").Where("day>=?", param.StartTime).Find(&dayStats)
 	context.JSON(200, dayStats)
 }
