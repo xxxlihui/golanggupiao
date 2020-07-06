@@ -9,3 +9,4 @@ var MarkDayDatas = NewDefaultDayRecords()
 var MarkDayInfos = NewDefaultStockInfos()
 
 //每日的复盘数据
+var MarkDayReplays = NewDefaultDayReplays()
