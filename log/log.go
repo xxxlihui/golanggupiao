@@ -40,6 +40,8 @@ func Debug(format string, args ...interface{}) {
 		Printf("DEBUG", format, args...)
 	}
 }
+
+//Logger
 func Info(format string, args ...interface{}) {
 	if _level <= INFO_L {
 		Printf("INFO", format, args...)

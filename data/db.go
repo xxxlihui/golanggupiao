@@ -22,7 +22,7 @@ func InitDb(host, user, password, dbname string, port int) {
 	db.LogMode(true)
 	db.AutoMigrate(&DayRecord{}, &DayRecord{},
 		&User{}, &StockInfo{}, &Tokens{},
-		&DayZt{}, //&data.Hudong{},
+		//&DayZt{}, //&data.Hudong{},
 	)
 }
 func CloseDb() {
