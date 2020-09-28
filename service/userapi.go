@@ -1,6 +1,8 @@
 package service
 
 import (
+	"bytes"
+	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"nn/data"
 )
@@ -13,4 +15,6 @@ func GetDayStat(context *gin.Context) {
 	dayStats := make([]data.DayStat, 0)
 	GetDB().Order("day").Where("day>=?", param.StartTime).Find(&dayStats)
 	context.JSON(200, dayStats)
+	decoder := json.NewDecoder(bytes.NewBuffer([]byte{}))
+	decoder.Decode()
 }

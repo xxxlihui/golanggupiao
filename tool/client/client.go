@@ -5,6 +5,7 @@ import (
 	"encoding/binary"
 	"errors"
 	"fmt"
+	"github.com/shopspring/decimal"
 	"github.com/urfave/cli/v2"
 	"github.com/urfave/cli/v2/altsrc"
 	"io/ioutil"
@@ -162,23 +163,23 @@ func readDay(bys []byte) (record *data.DayRecord, err error) {
 	record.Day = int(k)
 	err = binary.Read(buf, binary.LittleEndian, &k)
 	checkErr(err)
-	record.Open = int(k)
+	record.Open = decimal.NewFromInt(int64(k))
 	err = binary.Read(buf, binary.LittleEndian, &k)
 	checkErr(err)
-	record.High = int(k)
+	record.High = decimal.NewFromInt(int64(k))
 	err = binary.Read(buf, binary.LittleEndian, &k)
 	checkErr(err)
-	record.Low = int(k)
+	record.Low = decimal.NewFromInt(int64(k))
 	err = binary.Read(buf, binary.LittleEndian, &k)
 	checkErr(err)
-	record.Close = int(k)
+	record.Close = decimal.NewFromInt(int64(k))
 	var f float32
 	err = binary.Read(buf, binary.LittleEndian, &f)
 	checkErr(err)
-	record.Amount = uint64(f * 100)
+	record.Amount = decimal.RequireFromString(fmt.Sprintf("%d", uint64(f*100)))
 	err = binary.Read(buf, binary.LittleEndian, &k)
 	checkErr(err)
-	record.Vol = uint64(k)
+	record.Volume = decimal.RequireFromString(fmt.Sprintf("%d", uint64(k)))
 	return record, nil
 }
 func checkErr(err error) {
