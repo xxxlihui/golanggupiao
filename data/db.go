@@ -1,10 +1,9 @@
-package service
+package data
 
 import (
 	"fmt"
 	"github.com/jinzhu/gorm"
 	_ "github.com/lib/pq"
-	"nn/data"
 )
 
 var db *gorm.DB
@@ -21,9 +20,9 @@ func InitDb(host, user, password, dbname string, port int) {
 	}
 	db = _db
 	db.LogMode(true)
-	db.AutoMigrate(&data.DayRecord{}, &data.DayStat{},
-		&data.User{}, &data.Follows{}, &data.Tokens{},
-		&data.DayZt{}, //&data.Hudong{},
+	db.AutoMigrate(&DayRecord{}, &DayRecord{},
+		&User{}, &StockInfo{}, &Tokens{},
+		//&DayZt{}, //&data.Hudong{},
 	)
 }
 func CloseDb() {

@@ -2,17 +2,19 @@ package crawler
 
 import (
 	"fmt"
+	"math/big"
 	"testing"
 )
 
 func TestGetByCodes(t *testing.T) {
-	codes := []string{"600031", "002513", "300215", "000114", "300015"}
-	s, err := GetByCodes(codes)
-	if err != nil {
-		t.Error(err)
-	}
-	for _, e := range s {
-		t.Log(fmt.Sprintf("%+v", e))
-	}
+	var u big.Float
 
+	fmt.Printf("value:%s\n", u.String())
+	fmt.Printf("%+v\n", u)
+
+}
+
+type U struct {
+	Name string
+	F    int
 }

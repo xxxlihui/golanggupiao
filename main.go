@@ -2,12 +2,13 @@ package main
 
 import (
 	"github.com/urfave/cli/v2"
+	"nn/data"
 	"nn/service"
 	"os"
 )
 
-func init()  {
-	os.Setenv("TZ","Etc/GMT+8")
+func init() {
+	os.Setenv("TZ", "Etc/GMT+8")
 }
 func main() {
 
@@ -56,8 +57,8 @@ func main() {
 			},
 		},
 		Action: func(context *cli.Context) error {
-			defer service.CloseDb()
-			service.InitDb(
+			defer data.CloseDb()
+			data.InitDb(
 				context.String("db_host"),
 				context.String("db_user"),
 				context.String("db_pwd"),
