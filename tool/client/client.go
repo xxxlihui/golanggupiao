@@ -11,16 +11,18 @@ import (
 	"io/ioutil"
 	"net/http"
 	"nn/data"
+	"nn/log"
 	"nn/spider"
 	"os"
 	"path/filepath"
 	"strings"
+	"sync"
 )
 
 func main() {
 	var url, token, folder string
-	var day int
-	flags := []cli.Flag{
+	var day, concurrency int
+	var flags = []cli.Flag{
 		altsrc.NewStringFlag(&cli.StringFlag{
 			Name:        "server-url",
 			Aliases:     []string{"s", "URL"},
@@ -49,6 +51,14 @@ func main() {
 			EnvVars:     []string{"FOLDER"},
 			Destination: &folder,
 		}),
+		altsrc.NewIntFlag(&cli.IntFlag{
+			Name:        "concurrency",
+			Aliases:     []string{"c"},
+			Usage:       "并发数，默认4并发",
+			EnvVars:     []string{"C"},
+			Destination: &concurrency,
+			Value:       4,
+		}),
 	}
 	app := cli.App{
 		Name:    "股票数据通达信数据提取客户端",
@@ -63,7 +73,7 @@ func main() {
 			fds := []string{filepath.Join(folder, "vipdoc/sh/lday"),
 				filepath.Join(folder, "vipdoc/sz/lday")}
 			for _, f := range fds {
-				if err := ReadFolder(f, url, token, day); err != nil {
+				if err := ReadFolder(f, url, token, day, concurrency); err != nil {
 					return err
 				}
 			}
@@ -73,30 +83,73 @@ func main() {
 	app.Run(os.Args)
 }
 
-func ReadFolder(fd, url, token string, day int) error {
+type readFile struct {
+	day      int
+	code     string
+	filepath string
+}
+
+func check2Err(c chan struct{}, err error) {
+
+}
+func ReadFolder(fd, url, token string, day, concurrency int) error {
 	fs, err := ioutil.ReadDir(fd)
 	if err != nil {
 		return err
+	}
+	chans := make(chan *readFile, 5)
+	exitChan := make(chan error)
+	wait := sync.WaitGroup{}
+	for i := 0; i < concurrency; i++ {
+		go func() {
+			for {
+				select {
+				case readFile := <-chans:
+					records, err := ReadFile(readFile)
+					if err != nil {
+						exitChan <- err
+						return
+					}
+					err = PostData(url, token, &records)
+					if err != nil {
+						exitChan <- err
+						return
+					}
+					wait.Done()
+				case <-exitChan:
+					return
+				}
+			}
+		}()
 	}
 	for _, e := range fs {
 		if strings.HasPrefix(e.Name(), "sh600") ||
 			strings.HasPrefix(e.Name(), "sh601") ||
 			strings.HasPrefix(e.Name(), "sh603") ||
+			strings.HasPrefix(e.Name(), "sh688") ||
 			strings.HasPrefix(e.Name(), "sz00") ||
 			strings.HasPrefix(e.Name(), "sz30") {
 			code := strings.TrimRight(e.Name(), ".day")
 			code = strings.ToLower(code)
-			records, err := ReadFile(day, code, filepath.Join(fd, e.Name()))
-			if err != nil {
-				return err
+			wait.Add(1)
+			chans <- &readFile{
+				day:      day,
+				code:     code,
+				filepath: filepath.Join(fd, e.Name()),
 			}
-			err = PostData(url, token, &records)
-			if err != nil {
-				return err
-			}
+
 		}
 	}
-	return nil
+	go func() {
+		wait.Wait()
+		exitChan <- errors.New("完成")
+	}()
+	err = <-exitChan
+	if err.Error() == "完成" {
+		log.Info("完成")
+		return nil
+	}
+	return err
 }
 
 func PostData(url, token string, value interface{}) error {
@@ -111,7 +164,11 @@ func PostData(url, token string, value interface{}) error {
 	return nil
 }
 
-func ReadFile(day int, code, fp string) ([]*data.DayRecord, error) {
+func ReadFile(file *readFile) ([]*data.DayRecord, error) {
+	fp := file.filepath
+	code := file.code
+	day := file.day
+	log.Debug("读取文件%s", fp)
 	bys, err := ioutil.ReadFile(fp)
 	if err != nil {
 		return nil, err
@@ -133,7 +190,7 @@ func ReadFile(day int, code, fp string) ([]*data.DayRecord, error) {
 			continue
 		}
 		record.Code = code
-		fmt.Printf("day:%d,record:%+v\n", day, record)
+		//fmt.Printf("day:%d,record:%+v\n", day, record)
 		records = append(records, record)
 	}
 	return records, nil

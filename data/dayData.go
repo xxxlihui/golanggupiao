@@ -18,51 +18,51 @@ type PCode struct {
 //日线数据
 type PDayData struct {
 	//开盘价
-	Open decimal.Decimal `json:"open" gorm:"type:decimal(11,2)"`
+	Open decimal.Decimal `json:"open" gorm:"type:numeric(20,2)"`
 	//最高价
-	High decimal.Decimal `json:"high gorm:"type:decimal(11,2)"`
+	High decimal.Decimal `json:"high"gorm:"type:numeric(20,2)"`
 	//最低价
-	Low decimal.Decimal `json:"low gorm:"type:decimal(11,2)"`
+	Low decimal.Decimal `json:"low"gorm:"type:numeric(20,2)"`
 	//收盘价
-	Close decimal.Decimal `json:"close gorm:"type:decimal(11,2)"`
+	Close decimal.Decimal `json:"close"gorm:"type:numeric(20,2)"`
 	//成交量
-	Volume decimal.Decimal `json:"volume gorm:"type:decimal(11,2)"`
+	Volume decimal.Decimal `json:"volume"gorm:"type:numeric(20,2)"`
 	//成交额
-	Amount decimal.Decimal `json:"amount gorm:"type:decimal(11,2)"`
+	Amount decimal.Decimal `json:"amount"gorm:"type:numeric(20,2)"`
 	//上个交易日收盘价
-	PreviousClose decimal.Decimal `json:"previousClose gorm:"type:decimal(11,2)"`
+	PreviousClose decimal.Decimal `json:"previousClose"gorm:"type:numeric(20,2)"`
 	//涨停价
-	LimitUp decimal.Decimal `json:"limitUp gorm:"type:decimal(11,2)"`
+	LimitUp decimal.Decimal `json:"limitUp"gorm:"type:numeric(20,2)"`
 	//跌停价
-	LimitDown decimal.Decimal `json:"limitDown gorm:"type:decimal(11,2)"`
+	LimitDown decimal.Decimal `json:"limitDown"gorm:"type:numeric(20,2)"`
 }
 
 //每一只票当日的一般的指标值
 type PDaySample struct {
 	//涨幅
-	ChangePercent decimal.Decimal `json:"changePercent gorm:"type:decimal(11,2)"`
+	ChangePercent decimal.Decimal `json:"changePercent" gorm:"type:numeric(20,2)"`
 	//涨幅
-	Change decimal.Decimal `json:"change gorm:"type:decimal(11,2)"`
+	Change decimal.Decimal `json:"change"gorm:"type:numeric(20,2)"`
 	//振幅
-	Amplitude decimal.Decimal `json:"amplitude gorm:"type:decimal(11,2)"`
+	Amplitude decimal.Decimal `json:"amplitude"gorm:"type:numeric(20,2)"`
 	//量比
-	VolumeRate decimal.Decimal `json:"volumeRate gorm:"type:decimal(11,2)"`
+	VolumeRate decimal.Decimal `json:"volumeRate"gorm:"type:numeric(20,2)"`
 	//换手率
-	TurnoverRate decimal.Decimal `json:"turnoverRate gorm:"type:decimal(11,2)"`
+	TurnoverRate decimal.Decimal `json:"turnoverRate"gorm:"type:numeric(20,2)"`
 	//市净率
-	PB decimal.Decimal `json:"pb gorm:"type:decimal(11,2)"`
+	PB decimal.Decimal `json:"pb"gorm:"type:numeric(20,2)"`
 	//市盈率（动态）
-	PERation decimal.Decimal `json:"peRation gorm:"type:decimal(11,2)"`
+	PERation decimal.Decimal `json:"peRation"gorm:"type:numeric(20,2)"`
 	//总市值
-	TotalValue decimal.Decimal `json:"totalValue gorm:"type:decimal(11,2)"`
+	TotalValue decimal.Decimal `json:"totalValue"gorm:"type:numeric(20,2)"`
 	//流通市值
-	CurrentValue decimal.Decimal `json:"currentValue gorm:"type:decimal(11,2)"`
+	CurrentValue decimal.Decimal `json:"currentValue"gorm:"type:numeric(20,2)"`
 	//60涨跌幅
-	Amplitude60 decimal.Decimal `json:"amplitude60 gorm:"type:decimal(11,2)"`
+	Amplitude60 decimal.Decimal `json:"amplitude60"gorm:"type:numeric(20,2)"`
 	//涨速
-	Speed decimal.Decimal `json:"speed gorm:"type:decimal(11,2)"`
+	Speed decimal.Decimal `json:"speed"gorm:"type:numeric(20,2)"`
 	//5分钟涨跌
-	Speed5 decimal.Decimal `json:"speed5 gorm:"type:decimal(11,2)"`
+	Speed5 decimal.Decimal `json:"speed5"gorm:"type:numeric(20,2)"`
 }
 
 //每一次票当日的情绪

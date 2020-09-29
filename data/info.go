@@ -4,10 +4,10 @@ package data
 
 type StockInfo struct {
 	PCode
-	Name         string   `json:"name" gorm:"varchar(20)"` //名称
-	LaunchDate   int      `json:"launchDate"`              //上市日期
-	DelistedDate int      `json:"delistedDate"`            //退市日期
-	Tags         []string `json:"tags"`                    //标签信息
+	Name         string `json:"name" gorm:"varchar(20)"` //名称
+	LaunchDate   int    `json:"launchDate"`              //上市日期
+	DelistedDate int    `json:"delistedDate"`            //退市日期
+	//Tags         []string `json:"tags"`                    //标签信息
 }
 
 //StockInfos 股票的信息
