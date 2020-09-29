@@ -9,10 +9,9 @@ import (
 	"github.com/urfave/cli/v2"
 	"github.com/urfave/cli/v2/altsrc"
 	"io/ioutil"
-	"net/http"
 	"nn/data"
 	"nn/log"
-	"nn/spider"
+	"nn/tool/client/writer"
 	"os"
 	"path/filepath"
 	"strings"
@@ -24,16 +23,16 @@ func main() {
 	var day, concurrency int
 	var flags = []cli.Flag{
 		altsrc.NewStringFlag(&cli.StringFlag{
-			Name:        "server-url",
-			Aliases:     []string{"s", "URL"},
-			Usage:       "服务端的地址url",
+			Name:        "target-url",
+			Aliases:     []string{"target", "URL"},
+			Usage:       "目标地址，http地址或者目录，http地址以http开头",
 			EnvVars:     []string{"URL"},
 			Destination: &url,
 		}),
 		altsrc.NewStringFlag(&cli.StringFlag{
 			Name:        "token",
 			Aliases:     []string{"t"},
-			Usage:       "认证token",
+			Usage:       "走http时的认证token",
 			EnvVars:     []string{"TOKEN"},
 			Destination: &token,
 		}),
@@ -72,8 +71,19 @@ func main() {
 		Action: func(context *cli.Context) error {
 			fds := []string{filepath.Join(folder, "vipdoc/sh/lday"),
 				filepath.Join(folder, "vipdoc/sz/lday")}
+			var w writer.Writer
+			if strings.HasPrefix(url, "http") {
+				w = &writer.HttpWriter{
+					Token: token,
+					Url:   url,
+				}
+			} else {
+				os.MkdirAll(url, os.ModePerm)
+				w = &writer.FileWriter{Folder: url}
+			}
+
 			for _, f := range fds {
-				if err := ReadFolder(f, url, token, day, concurrency); err != nil {
+				if err := ReadFolder(f, url, token, day, concurrency, w); err != nil {
 					return err
 				}
 			}
@@ -92,7 +102,7 @@ type readFile struct {
 func check2Err(c chan struct{}, err error) {
 
 }
-func ReadFolder(fd, url, token string, day, concurrency int) error {
+func ReadFolder(fd, url, token string, day, concurrency int, writer writer.Writer) error {
 	fs, err := ioutil.ReadDir(fd)
 	if err != nil {
 		return err
@@ -110,7 +120,7 @@ func ReadFolder(fd, url, token string, day, concurrency int) error {
 						exitChan <- err
 						return
 					}
-					err = PostData(url, token, &records)
+					err = writer.Write(records)
 					if err != nil {
 						exitChan <- err
 						return
@@ -142,26 +152,14 @@ func ReadFolder(fd, url, token string, day, concurrency int) error {
 	}
 	go func() {
 		wait.Wait()
-		exitChan <- errors.New("完成")
+		close(exitChan)
 	}()
-	err = <-exitChan
-	if err.Error() == "完成" {
+	err, ok := <-exitChan
+	if !ok {
 		log.Info("完成")
 		return nil
 	}
 	return err
-}
-
-func PostData(url, token string, value interface{}) error {
-	client := spider.NewClient(spider.RandomUserAgent())
-	rsp, err := client.PostValue(url, "", http.Header{"token": {token}}, value, nil)
-	if err != nil {
-		return err
-	}
-	if rsp.StatusCode != http.StatusOK {
-		return errors.New("请求失败")
-	}
-	return nil
 }
 
 func ReadFile(file *readFile) ([]*data.DayRecord, error) {
