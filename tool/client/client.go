@@ -16,6 +16,7 @@ import (
 	"path/filepath"
 	"strings"
 	"sync"
+	"time"
 )
 
 func main() {
@@ -81,12 +82,14 @@ func main() {
 				os.MkdirAll(url, os.ModePerm)
 				w = &writer.FileWriter{Folder: url}
 			}
-
+			start := time.Now()
 			for _, f := range fds {
 				if err := ReadFolder(f, url, token, day, concurrency, w); err != nil {
 					return err
 				}
 			}
+			diff := time.Now().Sub(start).Milliseconds()
+			log.Info("耗时%d", diff)
 			return nil
 		},
 	}
