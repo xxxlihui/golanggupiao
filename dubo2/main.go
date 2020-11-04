@@ -93,6 +93,7 @@ func main() {
 			fmt.Printf("一共%d条记录\n", len(totalrst))
 			//各个模式分析
 			//特朗普均衡
+			writeHead(str)
 			sort.Slice(totalrst, func(i, j int) bool {
 				return totalrst[i][2] > totalrst[j][2]
 			})
@@ -112,6 +113,7 @@ func main() {
 			fmt.Printf("特朗普均衡 完成\n")
 			//拜登均衡
 			str.Reset()
+			writeHead(str)
 			sort.Slice(totalrst, func(i, j int) bool {
 				return totalrst[i][3] > totalrst[j][3]
 			})
@@ -130,6 +132,7 @@ func main() {
 			fmt.Printf("拜登均衡 完成\n")
 			//特朗普模式
 			str.Reset()
+			writeHead(str)
 			sort.Slice(totalrst, func(i, j int) bool {
 				return totalrst[i][2] > totalrst[j][2]
 			})
@@ -141,6 +144,7 @@ func main() {
 			fmt.Printf("特朗普 完成\n")
 			//拜登模式
 			str.Reset()
+			writeHead(str)
 			sort.Slice(totalrst, func(i, j int) bool {
 				return totalrst[i][3] > totalrst[j][3]
 			})
@@ -158,7 +162,9 @@ func main() {
 	app.Run(os.Args)
 
 }
-
+func writeHead(buffer *bytes.Buffer) {
+	buffer.WriteString("投特朗普资金,投拜登资金,特朗普赢的盈利,拜登赢的盈利,均衡值\n")
+}
 func enums(start, end, total, xf, yf int) [][5]int {
 	rst := make([][5]int, 0, (end-start)/2)
 	for x := start; x <= end; x++ {
