@@ -101,7 +101,7 @@ func main() {
 			})
 			rst := totalrst[0:row]
 			sort.Slice(rst, func(i, j int) bool {
-				return rst[i][2] < totalrst[j][2]
+				return rst[i][2] > totalrst[j][2]
 			})
 			//row=len(totalrst)
 			for i := 0; i < row; i++ {
@@ -120,7 +120,7 @@ func main() {
 			})
 			rst = totalrst[0:row]
 			sort.Slice(rst, func(i, j int) bool {
-				return rst[i][3] < totalrst[j][3]
+				return rst[i][3] > totalrst[j][3]
 			})
 			for i := 0; i < row; i++ {
 				v := rst[i]
