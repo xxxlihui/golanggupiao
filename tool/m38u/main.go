@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/urfave/cli/v2"
 	"github.com/urfave/cli/v2/altsrc"
 	"golang.org/x/net/context"
@@ -11,11 +12,12 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"sync"
 	"time"
 )
 
 func main() {
-	var url, dir string
+	var url, dir, filename string
 	var threadCount int
 	flags := []cli.Flag{
 		altsrc.NewStringFlag(&cli.StringFlag{
@@ -26,17 +28,23 @@ func main() {
 			Destination: &url,
 		}),
 		altsrc.NewStringFlag(&cli.StringFlag{
+			Name:        "filename",
+			Aliases:     []string{"n"},
+			Usage:       "文件名",
+			Destination: &filename,
+		}),
+
+		altsrc.NewStringFlag(&cli.StringFlag{
 			Name:        "dir",
 			Aliases:     []string{"d"},
 			Usage:       "目录",
-			EnvVars:     []string{"DIR"},
+			Value:       "./",
 			Destination: &dir,
 		}),
 		altsrc.NewIntFlag(&cli.IntFlag{
 			Name:        "thread",
 			Aliases:     []string{"t"},
-			Usage:       "并发下载数，默认10",
-			EnvVars:     []string{"THREAD"},
+			Usage:       "并发下载数",
 			Destination: &threadCount,
 			Value:       10,
 		}),
@@ -51,26 +59,50 @@ func main() {
 			return altsrc.NewYamlSourceFromFile("set.yaml")
 		}),
 		Action: func(context *cli.Context) error {
-			down(url, dir, threadCount)
+			mkdir(dir)
+			down(url, dir, filename, threadCount)
 			return nil
 		},
 	}
 	app.Run(os.Args)
 }
-
-func down(_url, dir string, thread int) {
+func mkdir(dir string) {
+	os.MkdirAll(dir, os.ModePerm)
+}
+func fileExistsForNewFile(dir, file string) string {
+	id := 0
+	for {
+		f := file
+		if id > 0 {
+			f = file + fmt.Sprintf("(%d)", id)
+		}
+		ph := filepath.Join(dir, f)
+		_, err := os.Stat(ph)
+		if err != nil {
+			if os.IsNotExist(err) {
+				return f
+			}
+		}
+		id++
+	}
+}
+func down(_url, dir, fileName string, thread int) {
+	g := sync.WaitGroup{}
 	list, err := getList(_url)
 	if err != nil {
 		println("下载错误", err.Error())
 		return
 	}
-	l := strings.LastIndex(_url, "/")
-	name := _url[l+1 : len(_url)-5]
-	//pfx := _url[:l+1]
+	//l := strings.LastIndex(_url, "/")
+	name := fileName
+
+	tmpDir := filepath.Join(dir, fileName+"_tmp")
+	os.MkdirAll(tmpDir, os.ModePerm)
 	total := len(list)
 	tr := thread
 	chans := make(chan *item, tr)
 	okc := make(chan *item)
+	g.Add(total)
 	//enc := make(chan struct{})
 	for i := 0; i < tr; i++ {
 		go func() {
@@ -80,12 +112,12 @@ func down(_url, dir string, thread int) {
 					println("下载", item.name)
 					u, _ := url.Parse(_url)
 					u2, _ := u.Parse(item.name)
-					err := downLoadOne(u2.String(), dir, name, item)
+					err := downLoadOne(u2.String(), tmpDir, fmt.Sprintf("%d", item.id))
 					if err != nil {
-						println(item.name, "下载失败")
+						println(item.name, "id=(", item.id, ")下载失败")
 					} else {
-						item.end(1)
 						okc <- item
+						g.Done()
 						break
 					}
 				}
@@ -97,44 +129,27 @@ func down(_url, dir string, thread int) {
 		for {
 			i := <-okc
 			ok++
-			println("完成", i.name, "已完成", ok, "一共", total)
+			println("完成", i.name, "已完成", ok, "一共", total, "  ", fmt.Sprintf("%.2f", float64(ok)/float64(total)*100))
 			if ok >= total {
 				break
 			}
 		}
 	}()
-	os.Mkdir(filepath.Join(dir, name), os.ModePerm)
-
-	for {
-		ok := 0
-		for _, v := range list {
-			if v.status == 0 {
-				v.start()
-				chans <- v
-				continue
-			} else {
-				//println("还有",v.name)
-			}
-			if v.status == 1 {
-				ok++
-			} else if v.status == 2 {
-				//println("下载中", v.name)
-			}
-			//println("还有", total-ok)
-		}
-		time.Sleep(2 * time.Second)
-		if ok >= total {
-			break
-		}
+	for _, v := range list {
+		chans <- v
+		//println("还有", total-ok)
 	}
+
+	g.Wait()
 	//合并文件
 	merge(list, dir, name)
-	os.RemoveAll(dir)
+	os.RemoveAll(tmpDir)
 	println("下载完成")
 }
 
 func merge(items []*item, dir, name string) {
-	p := filepath.Join(dir, name+".ts")
+	filename := fileExistsForNewFile(dir, name)
+	p := filepath.Join(dir, filename+".ts")
 	f, err := os.OpenFile(p, os.O_RDWR|os.O_CREATE|os.O_TRUNC, os.ModePerm)
 	defer f.Close()
 	if err != nil {
@@ -163,12 +178,11 @@ func write(bys []byte, pth string) error {
 	return err
 }
 
-func downLoadOne(url, dir, name string, item *item) error {
-	pth := filepath.Join(dir, name, item.Name())
+func downLoadOne(url, dir, name string) error {
+	pth := filepath.Join(dir, name)
 	info, err := os.Stat(pth)
 	if err == nil {
 		if info.Size() > 0 {
-
 			return nil
 		}
 	}
@@ -179,7 +193,6 @@ func downLoadOne(url, dir, name string, item *item) error {
 		return client.Get(url, "", nil, nil)
 	})
 	if err != nil {
-		println("下载", item.name, "失败")
 		//item.status = 0
 		return err
 	}
@@ -200,19 +213,22 @@ func getList(url string) ([]*item, error) {
 		return nil, err
 	}
 	strs := strings.Split(str, "\n")
-	rstrs := make([]*item, 0)
+	rstrs := make([]*item, 0, len(strs))
+	id := 0
 	for _, v := range strs {
 		if v == "" {
 			continue
 		}
 		if !strings.HasPrefix(v, "#") {
-			rstrs = append(rstrs, &item{name: v, status: 0})
+			id++
+			rstrs = append(rstrs, &item{id: id, name: v, status: 0})
 		}
 	}
 	return rstrs, err
 }
 
 type item struct {
+	id     int
 	name   string
 	status int
 	//lock   sync.Mutex
