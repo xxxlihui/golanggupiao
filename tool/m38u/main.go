@@ -22,7 +22,7 @@ func main() {
 	flags := []cli.Flag{
 		altsrc.NewStringFlag(&cli.StringFlag{
 			Name:        "url",
-			Aliases:     []string{"u", "URL"},
+			Aliases:     []string{"u"},
 			Usage:       "地址",
 			EnvVars:     []string{"URL"},
 			Destination: &url,
@@ -31,6 +31,7 @@ func main() {
 			Name:        "filename",
 			Aliases:     []string{"n"},
 			Usage:       "文件名",
+			Required:    true,
 			Destination: &filename,
 		}),
 
@@ -56,6 +57,9 @@ func main() {
 		Authors: []*cli.Author{{Name: "lhn", Email: "550124023@qq.com"}},
 		Flags:   flags,
 		Before: altsrc.InitInputSourceWithContext(flags, func(context *cli.Context) (context2 altsrc.InputSourceContext, e error) {
+			if _, err := os.Lstat("set.yaml"); err != nil && os.IsNotExist(err) {
+				os.OpenFile("set.yaml", os.O_CREATE, os.ModePerm)
+			}
 			return altsrc.NewYamlSourceFromFile("set.yaml")
 		}),
 		Action: func(context *cli.Context) error {
@@ -142,12 +146,12 @@ func down(_url, dir, fileName string, thread int) {
 
 	g.Wait()
 	//合并文件
-	merge(list, dir, name)
+	merge(list, dir, tmpDir, name)
 	os.RemoveAll(tmpDir)
 	println("下载完成")
 }
 
-func merge(items []*item, dir, name string) {
+func merge(items []*item, dir, tmpDir, name string) {
 	filename := fileExistsForNewFile(dir, name)
 	p := filepath.Join(dir, filename+".ts")
 	f, err := os.OpenFile(p, os.O_RDWR|os.O_CREATE|os.O_TRUNC, os.ModePerm)
@@ -156,14 +160,21 @@ func merge(items []*item, dir, name string) {
 		println("创建合并文件失败", err.Error())
 		return
 	}
+	total := len(items)
+	ok := 0
+	per := total / 10
 	for _, v := range items {
-		pth := filepath.Join(dir, name, v.Name())
+		pth := filepath.Join(tmpDir, fmt.Sprintf("%d", v.id))
 		bys, err := ioutil.ReadFile(pth)
 		if err != nil {
 			println("读取子文件失败", err.Error())
 			return
 		}
 		f.Write(bys)
+		ok++
+		if ok == per {
+			fmt.Println("合并", fmt.Sprintf("%.2f", float64(ok)/float64(total)))
+		}
 	}
 }
 
