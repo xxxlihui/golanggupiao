@@ -92,7 +92,7 @@ func fileExistsForNewFile(dir, file string) string {
 }
 func down(_url, dir, fileName string, thread int) {
 	g := sync.WaitGroup{}
-	list, err := getList(_url)
+	list, err := getList(_url, dir, fileName)
 	if err != nil {
 		println("下载错误", err.Error())
 		return
