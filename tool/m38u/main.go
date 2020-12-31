@@ -215,15 +215,28 @@ func getTimeoutContext(second int) context.Context {
 	ctx, _ := context.WithTimeout(context.Background(), time.Duration(second)*time.Second)
 	return ctx
 }
-func getList(url string) ([]*item, error) {
-	client := spider.NewClient(spider.RandomUserAgent())
-	str, _, _, err := spider.GetResponseString(nil, func() (*http.Response, error) {
-		return client.Get(url, "", nil, nil)
-	})
+func getList(url, dir, name string) ([]*item, error) {
+	c := ""
+	var strs []string
+	cBytes, err := ioutil.ReadFile(filepath.Join(dir, name+".m3u8"))
 	if err != nil {
-		return nil, err
+		client := spider.NewClient(spider.RandomUserAgent())
+		str, _, _, err := spider.GetResponseString(nil, func() (*http.Response, error) {
+			return client.Get(url, "", nil, nil)
+		})
+		if err != nil {
+			return nil, err
+		}
+		strs = strings.Split(c, "\n")
+		c = strings.Join([]string{url, str}, "\n")
+		ioutil.WriteFile(filepath.Join(dir, name+".m3u8"), []byte(c), os.ModePerm)
+	} else {
+		c = string(cBytes)
+		strs = strings.Split(c, "\n")
+		if len(strs) > 1 {
+			strs = strs[1:]
+		}
 	}
-	strs := strings.Split(str, "\n")
 	rstrs := make([]*item, 0, len(strs))
 	id := 0
 	for _, v := range strs {
