@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/url"
 	"nn/spider"
+	"nn/tool/m38u/cry"
 	"os"
 	"path/filepath"
 	"strings"
@@ -92,7 +93,7 @@ func fileExistsForNewFile(dir, file string) string {
 }
 func down(_url, dir, fileName string, thread int) {
 	g := sync.WaitGroup{}
-	list, err := getList(_url, dir, fileName)
+	list, decryptFunc, err := getList(_url, dir, fileName)
 	if err != nil {
 		println("下载错误", err.Error())
 		return
@@ -146,12 +147,12 @@ func down(_url, dir, fileName string, thread int) {
 
 	g.Wait()
 	//合并文件
-	merge(list, dir, tmpDir, name)
+	merge(list, dir, tmpDir, name, decryptFunc)
 	os.RemoveAll(tmpDir)
 	println("下载完成")
 }
 
-func merge(items []*item, dir, tmpDir, name string) {
+func merge(items []*item, dir, tmpDir, name string, decryptFunc func(bys []byte) []byte) {
 	filename := fileExistsForNewFile(dir, name)
 	p := filepath.Join(dir, filename+".ts")
 	f, err := os.OpenFile(p, os.O_RDWR|os.O_CREATE|os.O_TRUNC, os.ModePerm)
@@ -166,6 +167,9 @@ func merge(items []*item, dir, tmpDir, name string) {
 	for _, v := range items {
 		pth := filepath.Join(tmpDir, fmt.Sprintf("%d", v.id))
 		bys, err := ioutil.ReadFile(pth)
+		if decryptFunc != nil {
+			bys = decryptFunc(bys)
+		}
 		if err != nil {
 			println("读取子文件失败", err.Error())
 			return
@@ -215,19 +219,20 @@ func getTimeoutContext(second int) context.Context {
 	ctx, _ := context.WithTimeout(context.Background(), time.Duration(second)*time.Second)
 	return ctx
 }
-func getList(url, dir, name string) ([]*item, error) {
+func getList(url, dir, name string) ([]*item, func(bys []byte) []byte, error) {
 	c := ""
 	var strs []string
 	cBytes, err := ioutil.ReadFile(filepath.Join(dir, name+".m3u8"))
 	if err != nil {
+		err = nil
 		client := spider.NewClient(spider.RandomUserAgent())
-		str, _, _, err := spider.GetResponseString(nil, func() (*http.Response, error) {
+		str, _, _, err1 := spider.GetResponseString(nil, func() (*http.Response, error) {
 			return client.Get(url, "", nil, nil)
 		})
-		if err != nil {
-			return nil, err
+		if err1 != nil {
+			return nil, nil, err1
 		}
-		strs = strings.Split(c, "\n")
+		strs = strings.Split(str, "\n")
 		c = strings.Join([]string{url, str}, "\n")
 		ioutil.WriteFile(filepath.Join(dir, name+".m3u8"), []byte(c), os.ModePerm)
 	} else {
@@ -239,6 +244,7 @@ func getList(url, dir, name string) ([]*item, error) {
 	}
 	rstrs := make([]*item, 0, len(strs))
 	id := 0
+	var decryptFunc func(bys []byte) []byte
 	for _, v := range strs {
 		if v == "" {
 			continue
@@ -246,9 +252,14 @@ func getList(url, dir, name string) ([]*item, error) {
 		if !strings.HasPrefix(v, "#") {
 			id++
 			rstrs = append(rstrs, &item{id: id, name: v, status: 0})
+		} else {
+			if strings.HasPrefix(v, "#EXT-X-KEY") {
+				//加密视频
+				decryptFunc, _ = cry.GetDecryptFunc(url, v)
+			}
 		}
 	}
-	return rstrs, err
+	return rstrs, decryptFunc, err
 }
 
 type item struct {
