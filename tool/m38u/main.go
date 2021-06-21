@@ -93,7 +93,7 @@ func fileExistsForNewFile(dir, file string) string {
 }
 func down(_url, dir, fileName string, thread int) {
 	g := sync.WaitGroup{}
-	list, decryptFunc, err := getList(_url, dir, fileName)
+	list, err := getList(_url, dir, fileName)
 	if err != nil {
 		println("下载错误", err.Error())
 		return
@@ -117,7 +117,7 @@ func down(_url, dir, fileName string, thread int) {
 					println("下载", item.name)
 					u, _ := url.Parse(_url)
 					u2, _ := u.Parse(item.name)
-					err := downLoadOne(u2.String(), tmpDir, fmt.Sprintf("%d", item.id))
+					err := downLoadOne(u2.String(), tmpDir, fmt.Sprintf("%d", item.id), item.decryptFunc)
 					if err != nil {
 						println(item.name, "id=(", item.id, ")下载失败")
 					} else {
@@ -147,12 +147,12 @@ func down(_url, dir, fileName string, thread int) {
 
 	g.Wait()
 	//合并文件
-	merge(list, dir, tmpDir, name, decryptFunc)
+	merge(list, dir, tmpDir, name)
 	os.RemoveAll(tmpDir)
 	println("下载完成")
 }
 
-func merge(items []*item, dir, tmpDir, name string, decryptFunc func(bys []byte) []byte) {
+func merge(items []*item, dir, tmpDir, name string) {
 	filename := fileExistsForNewFile(dir, name)
 	p := filepath.Join(dir, filename+".ts")
 	f, err := os.OpenFile(p, os.O_RDWR|os.O_CREATE|os.O_TRUNC, os.ModePerm)
@@ -167,9 +167,9 @@ func merge(items []*item, dir, tmpDir, name string, decryptFunc func(bys []byte)
 	for _, v := range items {
 		pth := filepath.Join(tmpDir, fmt.Sprintf("%d", v.id))
 		bys, err := ioutil.ReadFile(pth)
-		if decryptFunc != nil {
+		/*if decryptFunc != nil {
 			bys = decryptFunc(bys)
-		}
+		}*/
 		if err != nil {
 			println("读取子文件失败", err.Error())
 			return
@@ -193,7 +193,7 @@ func write(bys []byte, pth string) error {
 	return err
 }
 
-func downLoadOne(url, dir, name string) error {
+func downLoadOne(url, dir, name string, decryptFunc func(bys []byte) []byte) error {
 	pth := filepath.Join(dir, name)
 	info, err := os.Stat(pth)
 	if err == nil {
@@ -211,6 +211,9 @@ func downLoadOne(url, dir, name string) error {
 		//item.status = 0
 		return err
 	}
+	if decryptFunc != nil {
+		bys = decryptFunc(bys)
+	}
 	err = write(bys, pth)
 
 	return err
@@ -219,7 +222,7 @@ func getTimeoutContext(second int) context.Context {
 	ctx, _ := context.WithTimeout(context.Background(), time.Duration(second)*time.Second)
 	return ctx
 }
-func getList(url, dir, name string) ([]*item, func(bys []byte) []byte, error) {
+func getList(url, dir, name string) ([]*item, error) {
 	c := ""
 	var strs []string
 	cBytes, err := ioutil.ReadFile(filepath.Join(dir, name+".m3u8"))
@@ -230,7 +233,7 @@ func getList(url, dir, name string) ([]*item, func(bys []byte) []byte, error) {
 			return client.Get(url, "", nil, nil)
 		})
 		if err1 != nil {
-			return nil, nil, err1
+			return nil, err1
 		}
 		strs = strings.Split(str, "\n")
 		c = strings.Join([]string{url, str}, "\n")
@@ -251,7 +254,7 @@ func getList(url, dir, name string) ([]*item, func(bys []byte) []byte, error) {
 		}
 		if !strings.HasPrefix(v, "#") {
 			id++
-			rstrs = append(rstrs, &item{id: id, name: v, status: 0})
+			rstrs = append(rstrs, &item{id: id, name: v, status: 0, decryptFunc: decryptFunc})
 		} else {
 			if strings.HasPrefix(v, "#EXT-X-KEY") {
 				//加密视频
@@ -259,13 +262,14 @@ func getList(url, dir, name string) ([]*item, func(bys []byte) []byte, error) {
 			}
 		}
 	}
-	return rstrs, decryptFunc, err
+	return rstrs, err
 }
 
 type item struct {
-	id     int
-	name   string
-	status int
+	id          int
+	name        string
+	status      int
+	decryptFunc func(bys []byte) []byte
 	//lock   sync.Mutex
 }
 
