@@ -5,7 +5,6 @@ go 1.14
 require (
 	github.com/360EntSecGroup-Skylar/excelize/v2 v2.1.0
 	github.com/PuerkitoBio/goquery v1.5.1
-	github.com/ahmetb/go-linq v3.0.0+incompatible // indirect
 	github.com/gin-gonic/gin v1.5.0
 	github.com/go-playground/universal-translator v0.17.0 // indirect
 	github.com/golang/protobuf v1.3.4 // indirect
@@ -18,9 +17,8 @@ require (
 	github.com/modern-go/reflect2 v1.0.1 // indirect
 	github.com/shopspring/decimal v1.2.0
 	github.com/urfave/cli/v2 v2.1.1
-	golang.org/x/net v0.0.0-20200202094626-16171245cfb2
-	golang.org/x/sys v0.0.0-20200302150141-5c8b2ff67527 // indirect
-	golang.org/x/text v0.3.2
+	golang.org/x/net v0.0.0-20220722155237-a158d28d115b
+	golang.org/x/text v0.3.8
 	gopkg.in/go-playground/validator.v9 v9.31.0 // indirect
 	gopkg.in/yaml.v2 v2.2.8 // indirect
 )
